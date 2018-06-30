@@ -1,3 +1,7 @@
 /log/*
 /tmp/*
+/public/esm/*
+/config/database.yml
+/config/mongoid.yml
+/config/resque.yml
 .DS_Store
