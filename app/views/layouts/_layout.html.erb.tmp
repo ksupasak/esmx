@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<%
+	p = {}
+	tp = @current_project.get_params if @current_project 
+	p = tp if tp
+	title = (p['app_title']and p['app_title']!='')?p['app_title']:"ESM:Innovation as a Service"
+	bg = (p['app_bg_style']and p['app_bg_style']!='')?p['app_bg_style']:"#eee"
+	logo = (p['app_logo_url']and p['app_logo_url']!='')?p['app_logo_url']:'/esm/logo.png'
+	
+%>
+<title><%= title %></title>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all.css"/>
+
+<script type="text/javascript" src="/extjs/ext-all.js"></script>
+<script src="/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="/ace/src/theme-clouds.js" type="text/javascript" charset="utf-8"></script>
+<script src="/ace/src/mode-html.js" type="text/javascript" charset="utf-8"></script>
+
+<!--
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+-->
+<%= stylesheet_link_tag "/stylesheets/esm_home" %>
+
+<%= javascript_include_tag "application" %>
+<%= csrf_meta_tag %>
+<meta name="viewport" content="width=768px, minimum-scale=1.0, maximum-scale=1.0" />
+
+<link type="text/css" href="/jquery/css/cupertino/jquery-ui-1.8.17.custom.css" rel="stylesheet" />	
+<script type="text/javascript" src="/jquery/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/jquery/js/jquery-ui-1.8.17.custom.min.js"></script>
+
+
+<script type="text/javascript" charset="utf-8">
+	
+		Ext.Loader.setConfig({
+		    enabled: true
+		});
+		Ext.Loader.setPath('Ext.ux', '/extjs/examples/ux');
+		Ext.require([
+			'Ext.tab.*',
+		    'Ext.grid.*',
+		    'Ext.data.*',
+		    'Ext.util.*',
+		    'Ext.state.*'
+		]);
+		
+</script>
+
+
+
+<!-- KendoUI  -->
+<%= render :partial=>'/layouts/kendoui.html'%>
+<%= stylesheet_link_tag    "application" %>
+
+<%= yield :header %>
+
+<style type="text/css" media="screen">
+	/*normal styles here */
+	.wrapper {
+	   width:960px;
+		border:0px solid blue;
+	
+	}
+	.footer{
+		width:960px;
+	}
+	@media only screen and (orientation:portrait){
+	   /* portrait styles here */
+	   .wrapper {
+	      width:758px;
+		border: 0px solid red;
+	   }
+	.footer{
+			width:758px;
+		}
+		.side-menu{
+			display:none;
+			width:185px;float:left;margin-right:10px
+		}
+	}
+</style>
+
+
+</head>
+
+<% 
+  screen = 'screen1024'
+  screen = session[:screen] if session[:screen]
+  case screen
+	when 'fullscreen' 
+		screen='100%';@logo=700;@width=1280;@height=800
+	when 'screen800'
+		screen="780px";@logo=400;@width=780;@height=500
+	when 'screen1024' 
+		screen= "960px";@logo=500;@width=960;@height=700
+	else
+  end
+%>
+
+<body style="background:<%=bg%>;background-repeat:no-repeat;
+background-attachment:fixed;
+ top:0; left:0; width:100%; height:100%;font-size:14px ">
+
+<div  class="wrapper">
+	
+	
+<div style="height:75px;padding:0px">
+<%=image_tag logo,:height=>65,:style=>'vertical-align:middle;float:left;margin:5px;margin-left:20px'%>
+&nbsp;<%#title if @context%>
+
+<div id="name" style="background:url('/esm/bg.png');padding:5px;float:right;margin:10px;padding:10px">
+<!-- <div id="name" style="float:right">
+		<%= link_to 'S', :controller=>'home', :action=>'change_screen_size',:screen=>'screen800', :return=>request.url%> | 
+		<%= link_to 'M', :controller=>'home', :action=>'change_screen_size', :screen=>'screen1024' , :return=>request.url%> | 
+		<%= link_to 'F', :controller=>'home', :action=>'change_screen_size',:screen=>'fullscreen' , :return=>request.url%> |
+		<%= link_to 'New Window', request.fullpath, :target=>'_blank'%>	
+	 </div>
+-->
+<span style="float:right;padding-right:10px">
+<% if @current_user%>
+<%= @current_user.login %> <%="(#{@current_user.role})" if @current_user.role%> | <%=link_to 'Change password', '/user/change_password'%> | <%= link_to 'Logout',"/user/logout?#{"id=#{@current_project.id}" if @current_project}" %>
+| <%= link_to @context ,"/esm_home" if @context%>
+<% else %>
+<% if @current_project%>
+<%= link_to 'Login',"/user/login?id=#{@current_project.id}"%>
+<% else %>
+<%= link_to 'Login','/user/login'%>
+<% end %>
+<% end %>
+</span>
+	<div class="clear">
+		
+	</div>
+	
+</div>
+
+</div>
+<%= render :partial=>'/layouts/navigation_bar.html'%>
+<div class="clear">
+	
+</div>
+<div class="content_panel" style="bordert:1px solid gray">	
+	
+<% if @current_project and (params[:controller]=='admin' or params[:controller]=='esm_home' )%>
+
+<div style=";border:0px solid;width:100%">
+
+	<h1 style="display:inline-block"><%=@current_project.name%> Project (<%=@current_project.package%>)</h1>
+	<%=link_to('Edit',{:action=>'edit_project',:id=>@current_project,:update=>'workspace'},:remote=>false)%> |
+	<%=link_to('Back',:action=>'index')%> |
+	<%= link_to('New Service',{:action=>'service_new',:id=>@current_project,:update=>'workspace'},:remote=>true) %> |
+	<%=link_to('Show Index',@current_project.url(request.server_name),:remote=>false,:target=>'_blank')%>
+	
+	
+	<span style="float:right">
+		<%= yield :navigation %>
+	</span>
+
+</div>
+<hr/>
+<% end %>
+<div id="content_panel" >
+<table border="0" cellspacing="0" cellpadding="0" style="width:100%">
+	<tr><td width="1%"  valign="top" class="side-menu"><%= render :partial=>'navigation_menu.html'%></td>
+	<td valign="top">
+	<div id="workspace_panel" style="float:left;border:0px solid;width:100%">
+		<%= yield %><%= yield :content%>
+	</div></td>
+		</tr>
+</table>	
+<div class="clear"></div>
+</div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+<%= yield :script %>	
+</script>
+
+
+
+
+
+
+
+<div class="footer" style=";background:url('/esm/bg.png');padding:5px">
+<% if @current_user %>
+&nbsp;&nbsp;User : <font color="#379b37"><%= @current_user.login  %></font> 
+<span style="float:right;padding-right:10px">Login at : <%= @current_user.last_accessed.strftime("%A, %e %B %Y %H:%M:%S") if @current_user.last_accessed%></span>
+<% else %>
+You are not login
+<% end %>
+<hr />
+&nbsp;&nbsp;Copyright @ 2010 <font color="#4747fe">E.S.M.Solution Co.,Ltd.</font> All rights reserved.
+<span style="float:right;padding-right:10px;color:#e88c29"><%= Time.now.strftime("%d-%m-%Y")%></span>
+<div class="clear"></div>
+</div>
+
+</div>
+
+</body>
+</html>

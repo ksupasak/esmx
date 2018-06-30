@@ -1,0 +1,11 @@
+<%
+	@attachments.each_with_index do |i,index|
+%>
+<div style="width:150px;float:left;margin:5px">
+<a href="<%=i.path%>?<%=i.id%>" onclick="return hs.expand(this)"><center><img src="<%=i.path%>?<%=i.id%>" name='img' id="img_<%=i%>" class="eachpicimgx" border='0'   height='90' align='absmiddle' ></center>
+</a>
+<div class='comment'>
+<%=i.title%>
+</div>
+</div>
+<% end %>

@@ -1,0 +1,576 @@
+
+<link rel= "stylesheet" href = "/dragdrop/opt.css" type="text/css" />
+<%= hidden_field_tag name, value.to_json ,:id=>fid  unless @show %>
+<%
+ip="camera_image_#{field.id}"
+pip= "gallery_#{field.id}"
+p = {:alt=>'No images', :width=>220,:height=>160,:style=>"background-color:\#fff"}.merge(fparams)
+p[:id] = "#{ip}_img"
+record_id = "/#{Time.now.strftime('%Y-%m-%d')}-#{@record.id if @record}" if @record
+record_name = ''
+record_name = "/#{params[:record_name].gsub /\//, "-"}" if params[:record_name]
+
+path = "esm/#{@current_solution.name}/#{@document.project.name}#{record_name}/#{@document.name}#{record_id}/#{field.column_name}"
+
+%>
+<% if !@show 
+	
+	options = ''
+	options = "&ref_2=#{params[:ref_2]}" if params[:ref_2]
+	  	
+%>
+<table border='0' style="width:100%;">
+	<tr><td style='width:100px'>
+	
+		<span style="float:left"><%= link_to("Sort ", "javascript:sort_image('#{field.id}')",:target =>'_blank') %></span>
+		<span style="float:left">&nbsp;|&nbsp;Select :&nbsp; </span>
+		<span style="float:left"><%= link_to("All ", "javascript:select_all_image('#{field.id}',1)",:target =>'_blank') %></span>
+		<span style="float:left">&nbsp;,&nbsp;</span>
+		
+		<span style="float:left"><%= link_to("None", "javascript:select_all_image('#{field.id}',0)",:target =>'_blank') %></span>
+		
+		<span style="float:right"><%= link_to('<i class="splashy-movie_play"></i>Snap Pictures'.html_safe, "/esm_image/#{@document.id}/snap?field_id=#{field.id}&p_id=#{@document.project.id}&path=#{path}&ref=#{record_name[1..-1]}#{options}",:target =>'_blank', :class=>'btn') %></span>
+		<span style="float:right" ><%= link_to('<i class="splashy-folder_classic_add"></i>Upload Pictures'.html_safe, "javascript:openUploadWindow()" ,:class=>'btn') %> &nbsp; </span>
+		<span style="float:right" ><%= link_to('<i class="splashy-image_modernist"></i>Take Picture (iOS)'.html_safe, "javascript:openUploadWindowCamera()" ,:class=>'btn') %> &nbsp; </span>
+		
+		<div class="clear"></div>
+</td></tr></table>
+
+<% else %>
+
+<table border='0' style="width:100%;">
+	<tr><td style='width:100px'>
+		<span style="float:right">
+		<%= link_to("Download", "/esm_image/#{@document.id}/download?record_id=#{@record.id}&field_id=#{field.id}&p_id=#{@document.project.id}&path=#{path}&ref=#{record_name[1..-1]}" ,:target =>'_blank')%></span>	
+		<div class="clear"></div>
+</td></tr></table>
+
+<% end %>
+<div style="width:100%;border:0px solid yellow;">
+
+	<%
+	
+	value = [] unless value
+
+	
+	if value and value!='' 
+	 		model = @document.project.load_model[:attachment]
+			t=value
+			@attachments=t.collect{|i| model.find(i)}.compact
+		 	@field = field
+	
+	unless @show 
+		
+		k = (@attachments.size.to_f / 4).ceil
+		if k <=2
+			n = k
+			m=0
+		else
+			n = 2
+			m = k-2
+			m = 7 if m > 7 
+		end
+			
+		
+		
+		
+	%>
+	
+	
+	<style type="text/css" media="screen">
+		#container {
+		    position: relative;
+
+		}
+
+		#infoi {
+		    width: 0px;
+		    height: 100%;
+		    position: absolute;
+		    top: 15px;
+		    left: 5px;
+			overflow:hidden;
+
+		}
+		#infoi2 {
+		    width: 0px;
+		    height: 100%;
+		    position: absolute;
+		    top: <%=15+130*n%>px;
+		    left: 5px;
+			overflow:hidden;
+		}
+		#infoi {
+		    z-index: 10;
+		}
+	</style>
+	
+	
+	<div id="container">
+	    <div id="infoi" style="height:<%=130*n %>px;border:2px solid #f99;z-index:1;"></div>
+		<% if m >0 %><div id="infoi2" style="height:<%=130*m %>px;border:2px solid #99f;z-index:1;"></div><% end %>
+	</div>
+	<% end %>
+	
+	<img src='/dragdrop/images/down16.png' id='indicator'/>
+	<div id='pictzone' class='<%=tb_class%>' style="border:1px solid #aaa;width:700px" >
+	    
+		<%
+		
+			@name = "#{@document.name}[#{@field.column_name}]"		
+		%><%= render :partial=>'/esm_documents/fields/image_camera_item'%>
+	
+	</div>
+	<% end %>
+	<div class="clear"></div>
+	
+	
+	
+
+<% if !@show %>
+	<div id='bottombar'>
+		
+	<span class="right">
+		<%= link_to("Recover Pictures", "/esm_image/#{@document.id}/recover?field_id=#{field.id}&p_id=#{@document.project.id}&path=#{path}",:target =>'_blank') %>
+	</span>
+	<a href='javascript:remove_image("<%=field.id%>")'>
+	<div style="float:left" id='trash' ondragover='traskOver()' ondragleave='trashOut()' ondrop='trashDrop()'>&nbsp;
+		
+	</div>
+	</a>
+	<span style="float:left;padding:10px;"><%= link_to("Sort", "javascript:sort_image('#{field.id}')",:target =>'_blank',:style=>"") %></span>
+
+	<div class="clear"></div>
+	</div>
+<% end %>
+
+
+
+<!-- Upload window -->
+<div id="search-<%=fid%>" style="display:none">	
+<% unless @show %>
+	<input name="upload[file]" id="_<%=fid%>" type="file" accept="image/*" capture="camera"/>
+<% end %>
+</div>
+<div id="search-<%=fid%>-camera" style="display:none">	
+<% unless @show %>
+	<input name="upload[file]" id="_<%=fid%>_camera" type="file" accept="image/*" capture="camera"/>
+<% end %>
+</div>
+
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    function remove_image(fid){
+		var list = []
+		$('.img_library_'+fid+"").each(function(index){
+		   list.push($(this))
+		});
+		for(var i=list.length-1;i>=0;i--){
+		
+		 obj = list[i];
+		    pictzone = $('#pictzone')
+		    if(obj.attr('checked')=='checked'){
+				j = $(obj.parent().parent().parent())
+				//alert(''+index+' '+j.attr('id'))
+				obj.removeAttr('checked')
+				j.remove();
+			}
+			
+		}
+	   window.scrollTo(0,$('#pictzone').offset().top-100);
+	}
+	function sort_image(fid){
+		var list = []
+		$('.img_library_'+fid+"").each(function(index){
+		   list.push($(this))
+		});
+		for(var i=list.length-1;i>=0;i--){
+		
+		 obj = list[i];
+		    pictzone = $('#pictzone')
+		    if(obj.attr('checked')=='checked'){
+				j = $(obj.parent().parent().parent())
+				//alert(''+index+' '+j.attr('id'))
+				// obj.removeAttr('checked')
+				pictzone.prepend(j)
+			}
+			
+		}
+	   window.scrollTo(0,$('#pictzone').offset().top-100);	
+	}
+
+
+	function select_all_image(fid,all){
+		var list = []
+		$('.img_library_'+fid+"").each(function(index){
+		   list.push($(this))
+		});
+		for(var i=list.length-1;i>=0;i--){
+		
+		 	obj = list[i];
+			if(all=='1')
+			obj.attr('checked','checked');
+			else
+			obj.removeAttr('checked')
+		}
+	   window.scrollTo(0,$('#pictzone').offset().top-100);	
+	}
+
+
+<% unless @show
+	
+	ssid = rand(99999999)
+	ssid = Time.now.to_i
+	ref = params[:ref]
+	ref = params[:record_name] if params[:record_name]
+%>
+
+
+function onSuccess(e) {
+ 	alert("Status: " + e.response.status);
+}
+
+
+
+
+ $(document).ready(function() {
+		 
+
+	console.log("define upload 1")
+		
+     $("#_<%=fid%>").kendoUpload({
+		multiple:true,
+         async: {
+             saveUrl: "/esm_attachments/<%=@document.id%>/upload.json?p_id=<%=@document.project.id%>&field_id=<%=@field.id%>&ssid=<%=ssid %>&ref=<%=ref%>",
+             removeUrl: "/esm_attachments/<%=@document.id%>/remove.json?field_id=<%=@field.id%>&value=<%=value%>",
+             autoUpload: true
+         },
+		success: function(e){
+			//alert(e.response.id)
+			
+		$.ajax({
+                url: '/esm_image/<%=@document.id%>/attach_to_gallery?p_id=<%=@document.project.id%>&field_id=<%=@field.id%>&upload=true&a_id='+e.response.id,
+                data: [],
+                dataType: 'script',
+                type: 'GET',
+                error: function (xhr, status, error) {
+					alert(error);
+                }
+            }).done(function(data){
+
+			});
+		}
+	});
+
+
+     $("#_<%=fid%>_camera").kendoUpload({
+		multiple:false,
+         async: {
+             saveUrl: "/esm_attachments/<%=@document.id%>/upload.json?p_id=<%=@document.project.id%>&field_id=<%=@field.id%>&ssid=<%=ssid %>",
+             removeUrl: "/esm_attachments/<%=@document.id%>/remove.json?field_id=<%=@field.id%>&value=<%=value%>",
+             autoUpload: true
+         },
+		success: function(e){
+			//alert(e.response.id)
+			
+		$.ajax({
+                url: '/esm_image/<%=@document.id%>/attach_to_gallery?p_id=<%=@document.project.id%>&field_id=<%=@field.id%>&upload=true&a_id='+e.response.id,
+                data: [],
+                dataType: 'script',
+                type: 'GET',
+                error: function (xhr, status, error) {
+					alert(error);
+                }
+            }).done(function(data){
+
+			});
+		}
+	});
+
+
+
+   });
+<% end %>
+</script>
+
+<script type="text/javascript" charset="utf-8">
+
+	function openUploadWindow(){
+		$(document).ready(function(){
+		    var window = $("#search-<%=fid%>").kendoWindow({
+		        height: "100px",
+		        title: "<%=field.name%> Attachment",
+		        visible: true,
+		        width: "300px"
+		    }).data("kendoWindow");
+		});
+		var window = $("#search-<%=fid%>").data("kendoWindow");
+	    window.center();
+	    window.open();
+		$("#search-<%=fid%>").css("display", "block")
+	}
+	
+	function openUploadWindowCamera(){
+		$(document).ready(function(){
+		    var window = $("#search-<%=fid%>-camera").kendoWindow({
+		        height: "100px",
+		        title: "<%=field.name%> Camera",
+		        visible: true,
+		        width: "300px"
+		    }).data("kendoWindow");
+		});
+		var window = $("#search-<%=fid%>-camera").data("kendoWindow");
+	    window.center();
+	    window.open();
+		$("#search-<%=fid%>-camera").css("display", "block")
+	}
+	function addAttachment(ssid){
+		//alert(ssid);
+		$('#test').html('ssid is '+ssid)
+		
+		$.ajax({
+                url: '/esm_image/<%=@document.id%>/attach_to_gallery?p_id=<%=@document.project.id%>&field_id=<%=field.id%>&upload=true&ssid='+ssid,
+                data: [],
+                dataType: 'script',
+                type: 'GET',
+                error: function (xhr, status, error) {
+					alert(error)
+                }
+            }).done(function(data){
+			});
+	}
+	
+</script>
+ 
+
+
+<style>
+.modal{
+        z-index:200
+}
+.modal-backdrop{
+        z-index:100
+}
+</style>
+
+<div class="modal hide" id="select-image-modal" style="width:660px" >
+<div class="modal-header">
+<h3>Select Images 
+
+<a href="#"  style="float:right" class="btn" data-dismiss="modal">Close</a><span style="float:right">&nbsp;&nbsp;</span>
+<a href="#"  style="float:right" class="btn  btn-info" data-dismiss="modal"  onclick="doSelect()">Submit</a><span style="float:right">&nbsp;&nbsp;</span>
+<a href="#" id="select-btn" style="float:right" class="btn" data-dismiss=""  onclick="doAdd()">Add Image</a> 
+<a href="#" id="remove-btn" style="float:right" class="btn" data-dismiss=""  onclick="doRemove()">Remove Image</a> 
+<a href="#" id="reset-btn" style="float:right" class="btn" data-dismiss=""  onclick="doReset()">Reset</a> 
+
+
+</h3>
+</div>
+
+<div class="modal-body" id="modal-selection" style="border-bottom:1px solid #ccc;">
+</div>
+
+
+<div class="modal-body" id="modal-body" style="height:300px;overflow:scroll;" >
+
+</div>
+<div class="modal-footer">
+<span style="float:left">* Double clicks to zoom the image</span>
+</div>
+
+</div>
+
+<style>
+.navitem
+{
+         
+    width: 150px;
+    /* padding: 5px; */
+}
+
+.selected
+{
+    border: 2px solid red;
+    width: 146px;
+    /* padding: 4px */
+}
+</style>
+
+<script type="text/javascript" charset="utf-8">
+ 
+field_idx =""; 
+
+function pressKey(){
+alert("press")
+ }
+
+function doSelect(){
+   list = []
+   
+   body = $("#piczone-"+field_idx);
+   body.empty();
+   	
+   for(i in active_list){
+      id = active_list[i]
+	  path =  path = main_path+id+".jpg"
+      body.append('<div style="width:150px;float:left;margin:5px"><center><img id="partial-'+id+'" src="'+path+'" border="0"   height="90px" align="absmiddle" ></center></div>');
+    }
+
+   $('#'+field_idx).val(JSON.stringify(active_list))
+    
+  
+}
+
+last_idx = -1;
+last_select = null;
+
+function getImg(list, index){
+  for(i in list){
+   if(list[i]==index)
+	return i	
+  }
+}
+
+
+
+opt = null;
+full_list = null
+current_list = null
+active_list = null
+main_path = ''
+<% if @current_project %>
+main_path = '/content/esm/<%=@current_project.esm.name%>/<%=@current_project.name%>/content/<%=@document.name%>/<%=@field.column_name%>/'
+<% end %>
+
+function buildCurrentList(){
+	
+	
+	body = $("#modal-body")
+    body.empty();
+    
+    for(i in current_list){
+        id = current_list[i]
+	
+        path =  path = main_path+id+".jpg"
+		body.append("<a href='"+path+"' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-"+id+"'  ><img id='choice-c-"+id+"' src='"+path+"?thumb=1' class='navitem' style='margin:1px'  onclick='doSelectObj(\""+id+"\")'  /></a>");
+    }
+}
+
+function buildActiveList(){
+	
+	
+	body = $("#modal-selection")
+    body.empty();
+    
+    for(i in active_list){
+        id = active_list[i]
+	
+        path =  path = main_path+id+".jpg"
+		body.append("<a href='"+path+"' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-"+id+"'  ><img id='choice-s-"+id+"' src='"+path+"?thumb=1' class='navitem' style='margin:1px'  onclick='doSelectObj2(\""+id+"\")'  /></a>");
+    }
+}
+
+
+
+function doList(fid){
+	
+  //array= eval($('#'+field_idx).val())
+  
+  field_idx = fid;
+  array = $("#"+field_idx).val()
+  active_list = []  
+  if(array){
+	active_list = eval(array)
+  }
+// reset active list
+  $("#modal-selection").empty()
+ 
+
+ if(full_list == null){
+  full_list = []
+  current_list = []  
+
+  $('.eachpicimg').each(function(i,obj){
+    full_list.push(obj.id)
+    // alert(getImg(active_list,obj.id))
+    if(getImg(active_list,obj.id)==null)
+    current_list.push(obj.id)
+  });
+  }else{
+  
+  list = []
+  for(i in active_list){
+	if(getImg(current_list,active_list[i]))
+	 current_list.splice(getImg(current_list,active_list[i]),1)
+  } 
+  
+  	
+}
+buildCurrentList();
+buildActiveList();
+}
+
+function doSelectObj(idx){
+	   
+		 last_idx = idx
+		 obj = $('#choice-c-'+idx)
+		 obj.addClass('navitem selected')  
+		 if(last_select!=null){
+          last_select.removeClass('selected');
+         }
+         last_select = obj;
+        $('#select-btn').addClass('btn-info')
+        $('#remove-btn').removeClass('btn-info')
+         opt=0
+}
+
+function doSelectObj2(idx){
+	 last_idx = idx
+	 obj = $('#choice-s-'+idx)
+	 obj.addClass('navitem selected')  
+	 if(last_select!=null){
+      last_select.removeClass('selected');
+     }
+     last_select = obj;
+     $('#select-btn').removeClass('btn-info')
+    $('#remove-btn').addClass('btn-info')
+    opt=1
+}
+
+
+function doAdd(){
+  if(last_select!=null&&opt==0){
+      active_list.push(last_idx)
+	  buildActiveList();
+	  current_list.splice(getImg(current_list,last_idx),1)
+	  last_select.remove()
+ 	  $('#select-btn').removeClass('btn-info')
+      last_select=null
+  	  last_idx=null
+}        
+}
+function doRemove(){
+  if(last_select!=null&&opt==1){
+      current_list.unshift(last_idx)
+	  buildCurrentList();
+	  active_list.splice(getImg(active_list,last_idx),1)
+	  last_select.remove()
+ 	  $('#remove-btn').removeClass('btn-info')
+      last_select=null
+  	  last_idx=null
+}        
+}
+function doReset(){
+	
+	full_list = null
+	
+	doList(field_idx)
+}
+
+ $(document).ready(function() {
+	// $('#select-image-modal').show();
+    $('#select-image-modal').appendTo($('body'));
+});
+</script>

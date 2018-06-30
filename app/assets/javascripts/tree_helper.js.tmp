@@ -1,0 +1,737 @@
+
+   function ESMTree(record_id, model, ap, fmap, master){
+    this.record_id = record_id;
+	this.map = map;
+	this.fmap = fmap;
+	this.master = master;
+
+    this.vlocal = null
+    this.report_monitor = []
+    this.report_reg = {}
+    this.report_type = {}
+    this.report_tmp = {}
+  
+
+	this.current_active; 
+	
+	this.model = model;
+	// alert(this.model)
+	
+	
+	this.closeNode = function(){
+		
+			var treeView = $("#treeview").data("kendoTreeView");
+			d = treeView.dataItem(node)
+			// node = $('#V'+fid).parent().parent().parent()
+			// 			li = node.find('.k-item')
+			// 			if(li.length!=0)
+			// 			li.each(function() {
+			// 			  treeView.remove($(this));
+			// 			});
+			// 	
+			
+				
+
+			if(d){
+				treeView.collapse(current_active)
+				var n = this.map[d.id]
+				if(n&&n['items']){
+				// alert(n['items'])
+				for (var i in n['items']) {
+					id = n['items'][i]['id']
+					div_id = this.fmap[id]
+		
+					$('#'+div_id).hide()
+				}
+					
+				}
+				
+				
+				
+			}
+	}
+	
+	this.openParentNode = function(node){
+
+		
+		var treeView = $("#treeview").data("kendoTreeView");
+		d = treeView.dataItem(node)
+		// console.log('openParentNode	'+d.id);
+		var div_id = this.fmap[d.id]
+		// alert(div_id)
+		if(div_id){
+			
+			$('#'+div_id).show()
+		}
+		
+		p = treeView.parent(node)
+		
+			if(p.length>0){
+				pi = treeView.dataItem(p)
+				openParentNode(p[0])
+			}
+		
+		
+		
+    }
+	
+	this.openNode = function(node){
+	
+		var treeView = $("#treeview").data("kendoTreeView");
+		d = treeView.dataItem(node)
+		treeView.expand(node)
+		this.openData(d.id)
+
+		
+	}
+	
+	
+	
+	this.openData = function(id){
+
+		debug = false
+		if(id[0]!='F')return;
+		// console.log('openData	'+id);
+		
+		
+		// if(id == 'F4845293449|2')debug=true;
+		// debug = false;
+        // alert('openData '+id)
+		var n = this.map[id]
+	    if(debug)alert('openData '+id+' '+n)
+		
+		if(typeof n != 'undefined' && typeof n['items'] !='undefined'){
+	    
+		var l = n['items']
+	
+		for (var i in l) {
+		// if(typeof l[i]!='undefined'){
+		if(debug)alert('openData '+id+" time "+i+" of "+l.length+" = "+l[i]['id'])
+			
+			var id = l[i]['id']
+			// alert("select "+id)
+			var div_id = this.fmap[id]
+			if(div_id){
+				if(debug) alert(div_id)
+				$('#'+div_id).show()
+				// if(div_id.indexOf('-')==-1){
+					v = $('#data-'+div_id).val()
+					// $('#V'+id).html(v)
+					
+					// eval(id+"_update()")
+					// alert('open '+div_id+'='+v)
+				// }
+					if(debug)alert('callx data_'+div_id.replace(/-/g,'_')+"_update()")
+					eval('data_'+div_id.replace(/-/g,'_')+"_update()")
+			}
+			
+			
+			// }
+		}
+		
+		}
+		 // alert('finish openData '+id)
+
+	}
+
+
+	this.closeData = function(id){
+	  
+	    var div_id = this.fmap[id]
+		// $('#'+div_id).hide()
+
+ 		var n = this.map[id]
+		if(typeof n != 'undefined' && typeof n['items'] !='undefined'){
+
+		
+		var l = n['items']
+	
+		for (var i in l) {
+			var x = l[i]['id']
+			var div_id = this.fmap[x]
+			if(div_id){
+				$('#'+div_id).hide()
+				// alert('close2 Data '+x +" div_id "+div_id)
+				// $('#data-'+div_id).val()
+				this.closeData(x)
+				
+			}
+		}
+		
+		}
+	}
+	
+	
+	this.getText = function(node){
+		
+		
+		if(typeof node!='undefined'){
+		var text = node.text
+		var obj = $('#data-'+this.fmap[node.id])
+		if(obj){
+			val = obj.val();
+		}
+		
+	
+		
+		if(typeof val!='undefined'){
+			text+=" = <span id='R"+node.id+"' class='blue '>"+val+"</span> "
+		}else{
+			text="<li>"+text+"</li>"
+		}
+			return text
+		}
+		return ''
+		
+	}
+	
+
+	
+	this.delegateEvent = function(id){
+		
+		var t = id.split("|");
+		// fid = t.slice(0,-1).join("-")
+		// value = t.slice(-1)	
+		fid = t[0]
+		value = t[1]
+		// alert('Select '+fid+ " value = "+value+"    from "+id)
+			
+		div_id = this.fmap[fid]
+		
+		$('#data-'+div_id).val(value)
+		// alert('data_'+div_id.replace(/-/g,'_')+"_update()")
+		eval('data_'+div_id.replace(/-/g,'_')+"_proxy_update()")
+		
+		
+		
+	}
+	
+	this.delegateEventContextMenu = function(){
+		obj = $(this) 
+		this.delegateEvent(obj.attr('id'))
+	}
+	
+	
+
+	
+	this.changeValue = function(fid,t,value,text) {
+	
+		var treeView = $("#treeview").data("kendoTreeView");
+		node = $('#V'+fid).parent().parent().parent()
+		var origin_fid = fid
+		// if(fid=='F9405682265-54639ebee5425f0f4000000a-F7928516240')
+		// alert('changeValue '+fid+' '+value+' '+text)
+			
+		// console.log('changeValue	'+fid+'	'+value+'	'+text);
+		values = []
+		if(typeof(value)!='undefined')
+		values = value.split("|")
+		
+		///////////////////////////////////////
+		// setup tree popup menus
+		///////////////////////////////////////	
+		var menu = []
+		for(var i in this.map[fid]['items']){
+		var d = this.map[fid]['items'][i]
+		
+		m = {name: d['text'], id: fid+"|"+d['id'], title: '' }
+		if(typeof d['items'] != 'undefined' ){
+			submenu=[]
+				for(var j in d['items']){
+					var dj = d['items'][j]
+						n = {name: dj['text'],
+						// img: 'images/create.png',
+				        id: fid+"|"+dj['id'],
+						title: ''
+						}
+						n['fun']=this.delegateEventContextMenu
+						
+						submenu.push(n)
+				}
+		
+			m['subMenu']=submenu
+		}else
+		
+		m['fun']=this.delegateEventContextMenu
+		menu.push(m);
+		}
+		$('#V'+fid).contextMenu(menu)
+	
+		
+		
+		
+	
+		
+		
+		//////////////////////////////////////
+		// remove existing children
+		//////////////////////////////////////
+		
+		li = node.find('.k-item')
+		if(li.length!=0)
+		li.each(function() {
+		  treeView.remove($(this));
+		});
+		
+		
+		
+		//////////////////////////////////////
+		// close all child
+		//////////////////////////////////////
+		
+		for(var i in this.map[fid]['items']){
+			var v = this.map[fid]['items'][i]
+			var key = fid+'|'+v['id']
+			if(values.indexOf(v['id'])==-1)
+			{    
+				// console.log('close '+values.length+" "+v['id'] )
+				this.closeData(key)
+			}
+		}
+		this.closeData(fid)
+		
+		
+		if(value && value.length!=0){
+		
+		var values
+	
+		if(value.indexOf('[')!=-1){
+			values = eval(value)
+		}else{
+			values = value.split('|')
+		}
+		// alert(node.attr('data-uid'))
+		
+		
+		
+		if(value=='TRUE'){
+			// alert(value+" "+map[fid]['items'].length)
+			var node = $('#V'+fid).parent().parent().parent()
+			for(var i in this.map[fid]['items']){
+				var v = this.map[fid]['items'][i]
+				var newNode = treeView.append(v,node);
+				treeView.expand(newNode)
+				this.openNode(node)
+				this.openData(v['id'])
+			
+			}
+		}
+		else{	
+			
+		if(values.length==1){
+			var v = values[0]
+		
+				var key = fid
+
+				if(v.length>20)
+				key+= '-'+v;
+				else
+				key+= '|'+v;
+		
+		
+		    // alert(key)
+			if(typeof this.map[key]!='undefined'){
+				var m = this.map[key]
+				
+				var mm = $.extend({},m)
+				list = []
+				for(var j in mm['items']){
+					jobj = mm['items'][j]
+					if(jobj['id'][0]=='F' && jobj['spriteCssClass']!='splashy-breadcrumb_separator_arrow_2_dots'){
+						list.push(jobj)
+					}
+				}
+				mm['items'] = list
+				
+				// newData = {id:key,text:m['text']}
+				var node = $('#V'+fid).parent().parent().parent()
+				if(typeof m['items'] !='undefined' && m['items'].length>0){
+				var newNode = treeView.append(mm,node);
+			    treeView.expand(newNode)
+				this.openNode(newNode)
+				this.openData(key)
+				}
+			}
+		}else
+		for(var i in values){
+			var v = values[i]
+			
+			var key = fid
+			
+			if(v.length>20)
+			key+= '-'+v;
+			else
+			key+= '|'+v;
+			
+			
+			// alert(key)
+			if(this.map[key]){
+				var m = this.map[key]
+				var mm = $.extend({},m)
+				list = []
+				for(var j in mm['items']){
+					jobj = mm['items'][j]
+					if(jobj['id'][0]=='F' && jobj['spriteCssClass']!='splashy-breadcrumb_separator_arrow_2_dots'){
+						list.push(jobj)
+					}
+				}
+				mm['items'] = list
+				
+				// newData = {id:key,text:m['text']}
+				// if(values.length>1)
+				var newNode = treeView.append(mm,node);
+			    treeView.expand(newNode)
+				// d = treeView.dataItem(node)
+				if(values.length>1)
+				this.openNode(newNode)
+				this.openData(key)
+			}
+
+		}
+		}
+		
+		$('#V'+fid).html(text)
+		
+		}else{
+	      	$('#V'+fid).html('NA '+value)
+		}
+		// node.children().removeClass("k-sprite");
+	 
+		$('.k-sprite').removeClass("k-sprite");
+		
+		
+		
+		// 
+	}
+
+
+
+
+
+
+    this.get_value = function(name){
+	o = $('#data-'+name)
+        if(o.attr("type")=='checkbox'){
+	  if(o.attr('checked'))
+	 	return 'true'
+	  else
+	        return 'false'
+	}else return o.val()
+	
+    }
+    this.regMonitor = function(func){
+        this.report_monitor.push(func);
+    }
+    
+    this.regField = function(field_name,div_id,tmp,type){
+        
+        this.report_reg[field_name] = div_id
+        this.report_type[field_name] = type
+        
+        if (typeof(tmp) != "undefined"){
+            this.report_tmp[field_name] = tmp
+        }
+
+    }   
+   
+    
+    this.initReport = function(){
+	    // alert('call initReport')
+	
+        $(".report-field").each(function(index){
+            var id = $(this).attr('id')
+            var name = $(this).attr('name')
+            var tmp = $(this).attr('template')
+            var type = $(this).attr('type')
+            
+            
+            regField(name,id,tmp,type)
+            
+        });
+        
+        this.vlocal = this.master[this.model]
+        
+        
+    }
+    
+    this.many = function(records,name,fname,fields,vmap){
+        
+        var res = []
+        
+        for(var i in records){
+            id = records[i]
+            var obj = {}
+            for(var f in fields){
+                fid = fields[f]
+                v = $('#data-'+name+'-'+fname+'-'+id+'-'+fid).val()
+                ov = v
+                // console.log("fid" +vmap[fid]+" ")
+                if(typeof v !='undefined' && typeof vmap[fid] !='undefined'){
+                    s = v.split("|")
+                    t = []
+                    for(var si in s){
+                        t.push(vmap[fid][s[si]])    
+                    }
+                    v = join_text(t)
+                    
+                }
+                obj['_'+fid] = ov
+                obj[fid] = v
+            }
+            res.push(obj)
+            
+        }
+        return res;
+        
+    }
+
+
+    this.join_text = function(ar){
+	return ar.join(", ")
+    }
+    
+     this.render_template = function(template){
+
+
+
+       var ptmp = build_template(template)
+
+       var text = ''
+            for(var j in ptmp){
+               var t = ptmp[j]
+                if(t[0]==':'){
+                    fname = t.substring(1)
+
+                    var v = $('#data-'+fname).val()
+
+		    if(typeof(v) != 'undefined'){
+
+                        var s = v.split("|")
+    			var l = []
+			if(typeof(s)!='undefined'){
+				for(var x in s){
+					var vs = s[x]
+					var  vc = vlocal[fname][vs];
+					if(typeof(vc)!= 'undefined')
+					vs = vc.trim()
+					if(vs!='')
+					l.push(vs)
+				}
+
+			}
+			if(l.length>0)
+ 			text+='<v>'+join_text(l)+'</v> '
+                    }
+                }else{
+                    text+=t+' '
+                }
+            }
+
+        return text
+    }
+
+
+    
+    this.render_multi_template = function(objs, template){
+        res = []
+        tmp = template.split(' ')
+        ptmp = []
+        pt = []
+        for(var i in tmp){
+            t = tmp[i]
+            if(t[0]==':'){
+                ptmp.push(pt.join(' '))
+                ptmp.push(t)
+                pt = []
+            }else{
+                pt.push(t)     
+            }
+        }
+    
+        ptmp.push(pt.join(' '))
+        
+        for(var i in objs){
+            obj = objs[i]
+            text = ''
+            for(var j in ptmp){
+                t = ptmp[j]
+                if(t[0]==':'){
+                    fname = t.substring(1)
+                    v = obj[fname]
+                    if(typeof(v) != 'undefined')
+                    text+=v+''
+                }else{
+                    text+=t+' '
+                }
+            }
+            res.push(text)
+        }
+        
+        return res;
+        
+    }
+    this.build_template = function(template){
+        
+        var tmp = template.split(' ')
+        var ptmp = []
+        var pt = []
+        for(var i in tmp){
+            var t = tmp[i]
+            if(t[0]==':'){
+                ptmp.push(pt.join(' '))
+                ptmp.push(t)
+                pt = []
+            }else{
+                pt.push(t)     
+            }
+        }
+        ptmp.push(pt.join(' '))
+        return ptmp
+     }
+     
+     
+    this.build_template2 = function(template){
+        
+        tmp = template.split(' ')
+        ptmp = []
+        pt = []
+        for(var i in tmp){
+            t = tmp[i]
+            if(t[0]==':'){
+                ptmp.push(pt.join(' '))
+                ptmp.push(t)
+                pt = []
+            }else{
+                pt.push(t)     
+            }
+        }
+        ptmp.push(pt.join(' '))
+        return ptmp
+     }
+     
+    this.eval_template = function(obj,ptmp){
+        
+       var text = ''
+            for(var j in ptmp){
+                var t = ptmp[j]
+                if(t[0]==':'){
+                    var fname = t.substring(1)
+                    var v = obj[fname]
+                    if(typeof(v) != 'undefined')
+                    text+='<v>'+v+'</v> '
+                }else{
+                    text+=t+' '
+                }
+            }
+        return text
+     }
+     
+     
+     this.render_multi_templates_with_filter = function(objs, templates, selector, filter, map){
+         
+        var objs_filter = []
+        for(var i in objs){
+            var j = objs[i]
+            if(parseInt(j['_'+selector])==filter)
+            objs_filter.push(j)
+        }
+        var res = render_multi_templates(objs_filter,templates)
+        if(res.length>0){
+        	map[filter].push(res[0])
+        	return true
+	}
+	return false
+     }    
+    
+     this.render_multi_templates =  function (objs, templates){
+         
+        var res = []
+        if(objs.length>0){
+        if(objs.length==1){
+            
+            stmp = build_template(templates['=s'])
+            text = eval_template(objs[0],stmp)
+            res.push(text)
+            
+        }else{
+            
+            mtemp = templates['=m']
+            stmp = build_template(mtemp[0])
+            mtmp = build_template(mtemp[2])
+            join = mtemp[1]
+            
+            rt = []
+            
+            for(var i in objs){
+                obj = objs[i]
+                text = eval_template(obj,stmp)
+                rt.push(text)
+            }
+            
+            if(join==true){
+                list = rt.slice(0,rt.length-1).join(', ')
+                values = [list,rt[rt.length-1]].join(", and ")
+            }else
+            values = rt.join(join)
+            
+            
+            mobj = {'values':values,'count':objs.length}
+            text = eval_template(mobj,mtmp)
+            res.push(text)
+            
+            
+        }
+        
+        
+        }
+        
+        return res;
+        
+    }
+
+   this.updateReport = function(){
+    // alert('call updateReport')
+
+     for (var key in this.report_reg) {
+
+        if (this.report_reg.hasOwnProperty(key)) {
+
+            // console.log("update Report...." + key)
+            id = this.report_reg[key]
+
+            value = $("#data-"+key).val()
+
+            values = value.split("|")
+
+            values_text = []
+
+            for(var vi in values){
+                v = values[vi]
+                if(typeof vlocal[key] != 'undefined'){
+                v = this.vlocal[key][v]
+                values_text.push(v)}
+            }
+
+            label = key
+            template = 'default'
+            if (typeof(report_tmp[key]) != "undefined"){
+                template = report_tmp[key];
+            }
+            var template = kendo.template($("#"+template).html());
+            var result = template(label,value,values,values_text); 
+            $("#"+id).html(result)
+
+        }
+
+
+    }
+
+        for(var m in this.report_monitor){
+            fm = this.report_monitor[m]
+            fm.apply();
+        }
+
+    }
+
+
+}
