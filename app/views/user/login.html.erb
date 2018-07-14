@@ -21,7 +21,7 @@
 
 	<div class="login_box" style="">
 		
-		<form action="dashboard.html" method="post" id="login_form">
+		<!--<form action="dashboard.html" method="post" id="login_form"> -->
 			<div class=" navbar-inner " style="text-align:center;padding-top:5px"><a href="/"><%= image_tag logo, :height=>36,:width=>250 %></a>
 			</div>    
 			<% if flash[:error] %>
@@ -108,8 +108,8 @@
 						
 					</div>
 				</div>
-					<%  if true or  @current_solution %>
-				<span id="solution_id_toggle"><center><a href="javascript:$('#solution_id').show();$('#solution_id_toggle').hide();">...</a></center></span>	
+					<%  unless @current_solution %>
+				<span id="solution_id_toggle"><center><a href="#">...</a></center></span>	
 				<div class="formRow" id="solution_id" style="display:none">
 					<div class="input-prepend">
 						<span class="add-on"><i class="icon-book"></i></span>
@@ -117,13 +117,13 @@
 					</div>
 				</div>
 				<script>
-				    $(document).ready(function(){
+			  $(document).ready(function(){
 					
-				<% if cookies[:esm] %>
+				<% if cookies[:esm] or request.host.split(".").size==4 %>
 				  // alert('<%=cookies[:esm]%>')
 				
 					$('#solution_id').show();$('#solution_id_toggle').hide();
-				<%  end %>
+				<%  end  %>
 			  });
 				</script>
 				
@@ -143,72 +143,7 @@
 				<span class="link_reg"><a href="/user/signup">Not registered? Sign up here</a></span>
 				<% end %>
 			</div>  
-		</form>
-		<!--
-		<form action="dashboard.html" method="post" id="pass_form" style="display:none">
-			<div class="top_b">Can't sign in?</div>    
-				<div class="alert alert-info alert-login">
-				Please enter your email address. You will receive a link to create a new password via email.
-			</div>
-			<div class="cnt_b">
-				<div class="formRow clearfix">
-					<div class="input-prepend">
-						<span class="add-on">@</span><input type="text" placeholder="Your email address" />
-					</div>
-				</div>
-			</div>
-			<div class="btm_b tac">
-				<button class="btn btn-inverse" type="submit">Request New Password</button>
-			</div>  
-		</form>
-		
 	
-		
-		<form action="dashboard.html" method="post" id="reg_form" style="display:none">
-			<div class="top_b">Sign up to Gebo Admin</div>
-			<div class="alert alert-login">
-				By filling in the form bellow and clicking the "Sign Up" button, you accept and agree to <a data-toggle="modal" href="#terms">Terms of Service</a>.
-			</div>
-			<div id="terms" class="modal hide fade" style="display:none">
-				<div class="modal-header">
-					<a class="close" data-dismiss="modal">×</a>
-					<h3>Terms and Conditions</h3>
-				</div>
-				<div class="modal-body">
-					<p>
-						Nulla sollicitudin pulvinar enim, vitae mattis velit venenatis vel. Nullam dapibus est quis lacus tristique consectetur. Morbi posuere vestibulum neque, quis dictum odio facilisis placerat. Sed vel diam ultricies tortor egestas vulputate. Aliquam lobortis felis at ligula elementum volutpat. Ut accumsan sollicitudin neque vitae bibendum. Suspendisse id ullamcorper tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum at augue lorem, at sagittis dolor. Curabitur lobortis justo ut urna gravida scelerisque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam vitae ligula elit.
-						Pellentesque tincidunt mollis erat ac iaculis. Morbi odio quam, suscipit at sagittis eget, commodo ut justo. Vestibulum auctor nibh id diam placerat dapibus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse vel nunc sed tellus rhoncus consectetur nec quis nunc. Donec ultricies aliquam turpis in rhoncus. Maecenas convallis lorem ut nisl posuere tristique. Suspendisse auctor nibh in velit hendrerit rhoncus. Fusce at libero velit. Integer eleifend sem a orci blandit id condimentum ipsum vehicula. Quisque vehicula erat non diam pellentesque sed volutpat purus congue. Duis feugiat, nisl in scelerisque congue, odio ipsum cursus erat, sit amet blandit risus enim quis ante. Pellentesque sollicitudin consectetur risus, sed rutrum ipsum vulputate id. Sed sed blandit sem. Integer eleifend pretium metus, id mattis lorem tincidunt vitae. Donec aliquam lorem eu odio facilisis eu tempus augue volutpat.
-					</p>
-				</div>
-				<div class="modal-footer">
-					<a data-dismiss="modal" class="btn" href="#">Close</a>
-				</div>
-			</div>
-			<div class="cnt_b">
-				
-				<div class="formRow">
-					<div class="input-prepend">
-						<span class="add-on"><i class="icon-user"></i></span><input type="text" placeholder="Username" />
-					</div>
-				</div>
-				<div class="formRow">
-					<div class="input-prepend">
-						<span class="add-on"><i class="icon-lock"></i></span><input type="text" placeholder="Password" />
-					</div>
-				</div>
-				<div class="formRow">
-					<div class="input-prepend">
-						<span class="add-on">@</span><input type="text" placeholder="Your email address" />
-					</div>
-					<small>The e-mail address is not made public and will only be used if you wish to receive a new password.</small>
-				</div>
-				 
-			</div>
-			<div class="btm_b tac">
-				<button class="btn btn-inverse" type="submit">Sign Up</button>
-			</div>  
-		</form>
-			-->
 	</div>
 	
 	<div class="links_b links_btm clearfix" >
@@ -219,7 +154,6 @@
 	<% end %>
 	</div>
 		
-	</div>  
    <% end %>
 
     <script>
@@ -266,6 +200,13 @@
 					$(element).closest('div').append(error);
 				}
 			});
+
+	
+			$('#solution_id_toggle').click(function(){
+				$('#solution_id').show();$('#solution_id_toggle').hide();
+				
+			})
+
         });
     </script>
 

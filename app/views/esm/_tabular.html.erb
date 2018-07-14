@@ -51,7 +51,7 @@
 	title = '' unless defined? title
 	rows = 0 unless rows
 	
-unless @esm_template
+if !@esm_template and cookies[:ie]!='true'
 	
 %>
 <div style="border:0px solid;">
@@ -107,7 +107,7 @@ unless @esm_template
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="fa fa-wrench"></i>
             </a>
-			<!--
+		
             <ul class="dropdown-menu dropdown-user">
                 <li>
                     <a href="#">Config option 1</a>
@@ -116,7 +116,7 @@ unless @esm_template
                     <a href="#">Config option 2</a>
                 </li>
             </ul>
-			-->
+			
             <a class="close-link">
                 <i class="fa fa-times"></i>
             </a>
@@ -126,7 +126,7 @@ unless @esm_template
 <% end %>
     <div class="ibox-content">
 
-        <table class="table">
+        <table class="table table-bordered table-striped">
             <thead>
             <tr>
    
@@ -138,14 +138,19 @@ unless @esm_template
             <tbody>
 			<% for row in data %>
             <tr>
-                <% for col in fs %>
-                <td><%=row[col].html_safe%></td>
+                <% for col in fs 
+
+				v = row[col]
+				v = row[col].strftime("%d-%m-%Y") if row[col].instance_of? Date
+				
+				%>
+                <td><%=v.html_safe%></td>
               	<% end %>
             </tr>
 			<% end %>
   
             </tbody>
         </table>
-
-    </div>
+    <br/>
+    </div></div>
 <% end %>
