@@ -47,13 +47,10 @@ path = "esm/#{@current_solution.name}/#{@document.project.name}#{record_name}/#{
 
 <% end %>
 <div style="width:100%;border:0px solid yellow;">
-
+	
 	<%
 	
-	value = [] unless value
-
-	
-	if value and value!='' 
+	if value and value!=''
 	 		model = @document.project.load_model[:attachment]
 			t=value
 			@attachments=t.collect{|i| model.find(i)}.compact
@@ -415,8 +412,42 @@ function doSelect(){
    for(i in active_list){
       id = active_list[i]
 	  path =  path = main_path+id+".jpg"
-      body.append('<div style="width:150px;float:left;margin:5px"><center><img id="partial-'+id+'" src="'+path+'" border="0"   height="90px" align="absmiddle" ></center></div>');
+      // body.append('<div style="width:150px;float:left;margin:5px"><center><img id="partial-'+id+'" src="'+path+'" border="0"   height="90px" align="absmiddle" ></center></div>');
+
+		
+		template = $("#esm-select-tempalte").clone();
+		template.css('display','block')
+		
+		template.attr("id",'choicc-'+id)
+		
+		img = template.find('img')
+		
+		img.attr('id','choice-s-'+id)
+		
+		img.attr('src',path+"?thumb=1")
+		img.attr('idx',id)
+		img.click(function(){
+			doSelectObj2($(this).attr('idx'));
+		});
+		
+		txt = template.find('input')
+		
+		old = $('#img_comment_ui_'+id).val()
+		txt.val(old)
+		txt.attr('idx',id)
+		txt.change(function(){
+			 $('#img_comment_ui_'+$(this).attr('idx')).val($(this).val())
+			 $('#img_comment_ui_'+$(this).attr('idx')).kendoComboBox();
+			 $('#img_comment_'+$(this).attr('idx')).val($(this).val())
+			
+		})
+		
+		body.append(template);
+
+
     }
+
+
 
    $('#'+field_idx).val(JSON.stringify(active_list))
     
@@ -455,20 +486,6 @@ function buildCurrentList(){
 	
         path =  path = main_path+id+".jpg"
 		body.append("<a href='"+path+"' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-"+id+"'  ><img id='choice-c-"+id+"' src='"+path+"?thumb=1' class='navitem' style='margin:1px'  onclick='doSelectObj(\""+id+"\")'  /></a>");
-    }
-}
-
-function buildActiveList(){
-	
-	
-	body = $("#modal-selection")
-    body.empty();
-    
-    for(i in active_list){
-        id = active_list[i]
-	
-        path =  path = main_path+id+".jpg"
-		body.append("<a href='"+path+"' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-"+id+"'  ><img id='choice-s-"+id+"' src='"+path+"?thumb=1' class='navitem' style='margin:1px'  onclick='doSelectObj2(\""+id+"\")'  /></a>");
     }
 }
 
@@ -556,6 +573,7 @@ function doRemove(){
       current_list.unshift(last_idx)
 	  buildCurrentList();
 	  active_list.splice(getImg(active_list,last_idx),1)
+	  buildActiveList();
 	  last_select.remove()
  	  $('#remove-btn').removeClass('btn-info')
       last_select=null
@@ -569,8 +587,76 @@ function doReset(){
 	doList(field_idx)
 }
 
+
+
+function buildActiveList(){
+	
+	
+	body = $("#modal-selection")
+   
+    list = [];
+    
+    for(i in active_list){
+        id = active_list[i]
+	
+        path =  path = main_path+id+".jpg"
+
+	// body.append("<a href='"+path+"' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-"+id+"'  ><img id='choice-s-"+id+"' src='"+path+"?thumb=1' class='navitem' style='margin:1px'  onclick='doSelectObj2(\""+id+"\")'  /></a>");
+		
+		template = $("#esm-select-tempalte").clone();
+		template.css('display','block')
+		
+		template.attr("id",'choicc-'+id)
+		
+		img = template.find('img')
+		
+		img.attr('id','choice-s-'+id)
+		
+		img.attr('src',path+"?thumb=1")
+		img.attr('idx',id)
+		img.click(function(){
+			doSelectObj2($(this).attr('idx'));
+		});
+		
+		txt = template.find('input')
+		
+		old = $('#img_comment_ui_'+id).val()
+		txt.val(old)
+		txt.attr('idx',id)
+		txt.change(function(){
+			 $('#img_comment_ui_'+$(this).attr('idx')).val($(this).val())
+			 $('#img_comment_ui_'+$(this).attr('idx')).kendoComboBox();
+			 $('#img_comment_'+$(this).attr('idx')).val($(this).val())
+		})
+		
+		list.push(template)
+
+
+    }
+
+    body.empty();
+
+    for(i in list){
+        o = list[i];
+	    body.append(o)
+	}
+
+
+
+
+}
+
+
  $(document).ready(function() {
 	// $('#select-image-modal').show();
     $('#select-image-modal').appendTo($('body'));
 });
+
+
 </script>
+
+<div id="esm-select-tempalte" style="width:180px;border:0px solid;display:none;float:left">
+	<center >	<a href='' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-""'  ><img id='choice-s-"+id+"' src='' class='navitem' style='margin:1px'  /></a>
+<%=text_field_tag "title","", :style=>'width:100px'%></center>
+	
+</div>

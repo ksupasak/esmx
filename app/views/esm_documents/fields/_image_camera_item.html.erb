@@ -26,7 +26,7 @@
 
 <% content_for :script do %>
 $(document).ready(function() {
-	 $("#img_comment_ui_<%=i.id%>").kendoComboBox({
+	    $("#img_comment_ui_<%=i.id%>").kendoComboBox({
 	        dataTextField: "text",
 	        dataValueField: "value",
 	        dataSource: <%=options.collect{|i| {'text'=>i,'value'=>i}}.to_json.html_safe%>,
