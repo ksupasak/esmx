@@ -366,7 +366,12 @@ function onSuccess(e) {
 </h3>
 </div>
 
-<div class="modal-body" id="modal-selection" style="border-bottom:1px solid #ccc;">
+<div class="modal-body" id="modal-selection-x" style="border-bottom:1px solid #ccc;">
+
+	<ul id="picmodal-selection"  style="list-style-type: none; margin: 0; padding: 0;">
+		
+		
+	</ul>
 </div>
 
 
@@ -389,10 +394,14 @@ function onSuccess(e) {
 
 .selected
 {
-    border: 2px solid red;
+    border: 1px solid red;
     width: 146px;
     /* padding: 4px */
 }
+#picmodal-selection li{
+	width:150px;
+}
+
 </style>
 
 <script type="text/javascript" charset="utf-8">
@@ -409,6 +418,12 @@ function doSelect(){
    body = $("#piczone-"+field_idx);
    body.empty();
    	
+   active_list = [];
+    $('.image-selected').each(function(){
+		active_list.push($(this).attr('idx'));
+    })
+
+
    for(i in active_list){
       id = active_list[i]
 	  path =  path = main_path+id+".jpg"
@@ -502,7 +517,7 @@ function doList(fid){
 	active_list = eval(array)
   }
 // reset active list
-  $("#modal-selection").empty()
+  $("#picmodal-selection").empty()
  
 
  if(full_list == null){
@@ -592,7 +607,7 @@ function doReset(){
 function buildActiveList(){
 	
 	
-	body = $("#modal-selection")
+	body = $("#picmodal-selection")
    
     list = [];
     
@@ -607,6 +622,9 @@ function buildActiveList(){
 		template.css('display','block')
 		
 		template.attr("id",'choicc-'+id)
+		template.addClass("image-selected");
+		
+		template.attr('idx',id)
 		
 		img = template.find('img')
 		
@@ -652,11 +670,15 @@ function buildActiveList(){
     $('#select-image-modal').appendTo($('body'));
 });
 
+$( function() {
+  $( "#picmodal-selection" ).sortable();
+  $( "#picmodal-selection" ).disableSelection();
+} );
 
 </script>
 
-<div id="esm-select-tempalte" style="width:180px;border:0px solid;display:none;float:left">
-	<center >	<a href='' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-""'  ><img id='choice-s-"+id+"' src='' class='navitem' style='margin:1px'  /></a>
+<li id="esm-select-tempalte" style="width:155px;border:0px solid;display:none;float:left">
+	<center >	<a href='' ondblclick='return hs.expand(this)' onclick='return false' id='choicc-""'  ><img id='choice-s-"+id+"' src='' class='navitem eachpicimgx'   align='absmiddle' style='margin:1px'  /></a>
 <%=text_field_tag "title","", :style=>'width:100px'%></center>
 	
-</div>
+</li>
