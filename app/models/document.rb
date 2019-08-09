@@ -659,7 +659,7 @@ class Document < ActiveRecord::Base
                                 
                                 value = record[i.column_name]
                   
-                                if value 
+                                if value and value.class == Array
                                         list = value.collect{|j| table.find(j)}.compact
                                         count = 0 
                                         # puts "Relation Mapping"
