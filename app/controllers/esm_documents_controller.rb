@@ -99,7 +99,7 @@ class EsmDocumentsController < EsmDevController
 
  def edit_tree
      @document = Document.find(params[:id])
-     if request.post? and params[:document] and params[:document][:tree_data]!=''
+     if request.post? and params[:document] #and params[:document][:tree_data]!=''
        @document.update_attributes params[:document]
        # if params[:fields]
        #             params[:fields].each_pair do |k,v|
