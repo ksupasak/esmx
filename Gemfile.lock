@@ -139,7 +139,7 @@ GEM
     protected_attributes (1.1.4)
       activemodel (>= 4.0.1, < 5.0)
     public_suffix (3.0.2)
-    puma (3.11.4)
+    puma (3.12.4)
     raabro (1.1.6)
     rack (1.6.10)
     rack-gridfs (0.3.0)
