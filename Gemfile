@@ -104,3 +104,5 @@ gem 'resque-scheduler'
 gem 'rerun'
 
 gem 'utf8-cleaner'
+gem 'roo'
+gem 'roo-xls'

@@ -136,7 +136,7 @@ else
 	if !field.description.blank?
 	t = ERB.new field.description
 	content = t.result(binding)
-	@label+='&nbsp;'.html_safe+link_to(image_tag('info.gif'),"javascript:alert('#{content}')",:class=>'pop_over','data-content'=>content,'data-original-title'=>label,'data-placement'=>'top') 
+	@label+='&nbsp;'.html_safe+link_to(image_tag('info.gif'),"javascript:alert('#{content}')",:class=>'pop_over_hide','data-content'=>content,'data-original-title'=>label,'data-placement'=>'top') 
 	end
 	@label+= " : "
 	before_l=after_l=nil

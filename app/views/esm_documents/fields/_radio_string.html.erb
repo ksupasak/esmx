@@ -100,7 +100,7 @@ options.each_with_index do |i,index|
 		t = $(this);
 		v = $('#<%=fid%>').val();
 		
-		if(v!=""&&v==t.val()){
+		if(false&&v!=""&&v==t.val()){
 			t.prop('checked', false);
 		}
 		<%="#{func}_func()"%>

@@ -193,8 +193,8 @@ class Document < ActiveRecord::Base
   def filter_record_params model,params
       models = self.project.load_model
 
-      puts 
-      puts params.inspect 
+      # puts
+     #  puts params.inspect
 
       params.require(:record).permit!
 
@@ -219,10 +219,10 @@ class Document < ActiveRecord::Base
      	 # puts ""
   	 # puts ""       
             params[:record][k.to_sym] = ActiveSupport::JSON.decode(params[:record][k.to_sym])
-            if params[self.name.to_sym]
+            if params[self.name.to_sym] and params["na_#{k}".to_sym]==nil
             f = params[self.name.to_sym][k]
             if f
-  	  value = Fields::RelationMany.filter_params(self,field,params[:record][k],f)
+  	        value = Fields::RelationMany.filter_params(self,field,params[:record][k],f)
             puts "============== #{value.inspect}"
             params[:record][k.to_sym] = value if value.size>0
 
@@ -842,6 +842,7 @@ class Document < ActiveRecord::Base
 
            if self.tree_data
                   tdata = eval(self.tree_data.gsub(':','=>')) 
+                   tdata = [{'id'=>'root','child'=>[]}] if tdata==nil or tdata==[]
                   root_data_items = mapping(tdata[0], tmap,umap) 
            end
 

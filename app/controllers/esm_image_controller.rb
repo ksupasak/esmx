@@ -35,7 +35,7 @@ class EsmImageController < EsmDevController
              head[t[0].to_sym] = t[1]
       end
       end
-      puts "%%%%%#{head}"
+      # puts "%%%%%#{head}"
       
       params[:sort_order] = Time.now unless params[:sort_order]
       filename = "#{head[:filename] }" if head[:filename] 

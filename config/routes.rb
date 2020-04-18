@@ -24,7 +24,7 @@ Esmx::Application.routes.draw do
          # match 'esm/:esm/:project/:service/:opt' =>'esm_proxy#index'
          get 'barcode' =>'esm_image#barcode'
          match 'content/esm/*package/:id(.:format)'=>'esm_attachments#show' ,via: [:get, :post]
-
+         match 'content/data/*package/:id/:filename(.:format)'=>'esm_attachments#show' ,via: [:get, :post]
          # match 'content/esm/:solution_name/:project_name/*package/:id(.:format)'=>'esm_attachments#show' ,via: [:get, :post]
 
 

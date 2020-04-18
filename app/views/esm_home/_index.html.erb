@@ -27,7 +27,7 @@
 </header>
 <hr/>
 <div class="">
-<% for app in @current_solution.projects%>
+<% for app in @current_solution.projects.order(:created_at)%>
 
 <div class="app">
 	<a href ="<%="#{app.url(request.server_name)}"%>">
