@@ -4,9 +4,11 @@
 %>
 	<h1><%= @document.title %> Document</h1>
 	<span style="float:right;">
-	<%= link_to "Preview", {:controller=>'esm_projects',:action=>'show',:id=>@document.project,:path=>"/esm_documents/#{@document.id}"},:remote=>true %> | 
-	<%= link_to "Edit Layout", {:action => "edit_layout",:id=>@document},:remote=>true %> |
-	<%= link_to "Tree Structure", {:action => "edit_tree",:id=>@document},:remote=>true %> |
+	<%= link_to "Preview", "/esm_documents/#{@document.id}",:remote=>true %> | 
+		
+	<%# link_to "Preview", "/esm_projects/show?id=#{@document.project.id}&path=/esm_documents/#{@document.id}",:remote=>true %>
+	<%= link_to "Edit Layout", "/esm_documents/#{@document.id}/edit_layout" ,:remote=>true %> |
+	<%= link_to "Tree Structure", "/esm_documents/#{@document.id}/edit_tree" ,:remote=>true %> |
 	<%= link_to "Submission", @document.service.url(request.domain)+"/../create"  if @document.service %> |
 	<%= link_to "Table", @document.service.url(request.domain)+"/../index"  if @document.service %> |
 	<%= link_to "Analysis", {:controller=>'esm_report',:action => "analysis",:id=>@document} ,:remote=>true %> |

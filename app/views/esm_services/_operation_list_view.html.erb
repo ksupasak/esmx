@@ -11,7 +11,7 @@
 <% for row in operations %>
 		<div style="float:left;display:inline-block">
 		<label style="">&nbsp;
-			<%= link_to(row.name,{:controller=>'esm_operations',:action=>'edit',:id=>row,:sid=>@service.id},:remote=>true) %>
+			<%= link_to(row.name,"/esm_operations/#{row.id}/edit?sid=#{@service.id}" ,:remote=>true) %>
 		</label>
 		</div>
 <% end %>

@@ -1,9 +1,9 @@
 
 
-class ScriptTemplate < ActiveRecord::Base
+class ScriptTemplate < ApplicationRecord
   
   self.table_name = :esm_templates
-  attr_accessible :name,:generator,:template
+  # attr_accessor :name,:generator,:template
   
    def generate command, this,  params
      return ERB.new(self.generator).result(binding)

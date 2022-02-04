@@ -11,7 +11,62 @@
 #   puts "Env = #{ENV['MONGOHQ_URL']}; DB NAME: #{name}"
 # end
 # MongoMapper.database = "#{name}"
+Mongoid.raise_not_found_error = false
+Mongoid::Config.belongs_to_required_by_default = false
 
+module Moped
+  module BSON
+    class ObjectId
+      alias :to_json :to_s
+      alias :as_json :to_s
+    end
+  end
+end
+
+
+Mongoid::Criteria::Queryable::Extensions::String.class_exec{
+
+  def __sort_option__
+    split(/,/).inject({}) do |hash, spec|
+
+      
+      # spec = spec.to_sym.asc if spec
+      
+      hash.tap do |_hash|
+        field, direction = spec.strip.split(/\s/)
+        
+        # puts 'sort option edited '+field.inspect+'::'+direction.inspect
+        
+        
+        if direction
+        _hash[field.to_sym] = direction.to_direction
+      elsif f = field.split(".") and f.size==2
+            
+          _hash[f[0].to_sym] = f[1]=='desc'?-1:1
+           
+        
+        else
+          
+        _hash[field.to_sym] = 1 
+      end
+      end
+    end
+  end
+  
+
+
+}
+
+
+
+Mongoid::Contextual::Mongo.class_exec{
+  
+  def all
+    self.to_a
+  end
+  
+  
+}
 
 # module Mongo
 #   
@@ -24,7 +79,7 @@
 #   end
 # 
 # end
-puts 'definde mongo'
+# puts 'definde mongo'
  Mongo::Collection.class_exec{
    
    
@@ -36,10 +91,18 @@ puts 'definde mongo'
     []
    end
    
-
+   def self.size
+     
+     self.count
+     
+   end
   
    
  }
+ 
+ 
+ 
+ 
  
  # call all {#<Origin::Key:0x007fc52ba28f58 @name=:date, @strategy=:__override__, @operator="$gte", @expanded=nil, @block=nil>=>Wed, 27 Jun 2018 00:00:00 +07 +07:00, #<Origin::Key:0x007fc52ba28b70 @name=:date, @strategy=:__override__, @operator="$lt", @expanded=nil, @block=nil>=>Wed, 27 Jun 2018 23:59:59 +07 +07:00}
  # MONGODB | localhost:27017 | esm-cusys.find | STARTED | {"find"=>"colorectal.appointment", "filter"=>{"date"=>{"$gte"=>Wed, 27 Jun 2018 00:00:00 +07 +07:00, "$lt"=>Wed, 27 Jun 2018 00:00:00 +07 +07:00}}}
@@ -47,7 +110,7 @@ puts 'definde mongo'
  Mongoid::Criteria.class_exec{
    
    def where(expression)
-     puts expression.inspect 
+     # puts expression.inspect 
      combine=nil
      
      if expression
@@ -55,16 +118,23 @@ puts 'definde mongo'
        if k!='$or' and k!='$in' and v.kind_of?(Array)
           expression[k] = {'$in'=>v}
        end
-      
-       if k.class==Origin::Key
-         puts "date key #{k.inspect}"
+       
+       # date key
+       
+       # puts "xx"+k.class.inspect 
+       
+       
+       if false and k.class==Origin::Key
+         # puts "date key #{k.inspect}"
          combine={} unless combine
          combine[k.name]={} unless combine[k.name]
          v+=1 if k.operator=='$lt'
-         combine[k.name][k.operator] = v #Time.at(v.to_i)#"ISODate('#{v.("%Y-%m-%dT%H:%M:00.000Z")}')" 
-         expression.delete k  
-         
+         combine[k.name][k.operator] = v #Time.at(v.to_i)#"ISODate('#{v.("%Y-%m-%dT%H:%M:00.000Z")}')"
+         expression.delete k
+
        end
+       
+       
        if v==''
          expression.delete k
        end
@@ -74,13 +144,13 @@ puts 'definde mongo'
      expression.merge! combine if combine
      
       end
-      puts 'expression'
-      puts expression.inspect 
+      # puts 'expression'
+      # puts expression.inspect
      super 
    end
    
-    def all options=nil
-      puts "call all #{options.inspect}"
+    def all options={}
+      # puts "call all #{options.inspect}"
       orders = []
       limits = nil
       
@@ -91,16 +161,30 @@ puts 'definde mongo'
     
       if options 
         
+        
+        if  options[:sort]
+        
+        order_by = options[:sort].collect{|i| 
+          j = i.to_s.split(".")
+          mode = :asc
+          mode = :desc if j[1]=='desc'
+         
+          [j[0],mode]
+        }
+        options.delete :sort
+        
+        end
+        
         if  options[:order]
         
         order_by = options[:order].split(",").collect{|i| 
           j =i.split " "
           mode = :asc
           mode = :desc if j[1]=='desc'
-          options.delete :order
+       
           [j[0],mode]
         }
-        
+        options.delete :order
         end
         
         if  options[:limit]
@@ -112,6 +196,40 @@ puts 'definde mongo'
       
       
       end
+      
+      
+      
+      
+      
+      
+      
+      
+      if options[:date.lt]
+        options[:date.lte] = options[:date.lt]
+        options.delete :date.lt
+      end
+       
+ kmap = {}
+
+ 
+ options.each_pair do |k,v|
+   
+
+   
+   if k.class==Mongoid::Criteria::Queryable::Key and  k.operator=='$lte'
+     
+     options[:date.lte] = v.to_datetime
+
+   end
+
+ end
+      
+      
+      
+      
+      
+      
+      
       
       result = where(options)
       
@@ -155,7 +273,7 @@ puts 'definde mongo'
  }
    Mongoid::Findable.class_exec{
      def find *arg
-      puts 'call finding '+arg.inspect
+      # puts 'call finding '+arg.inspect
       if arg and arg[0]!=nil and arg[0]!=""
         
         if arg[0].kind_of?(Array) and arg[0][0] and arg[0][0] =='[]'
@@ -175,16 +293,16 @@ puts 'definde mongo'
       end
      end
      
-      def last options=nil
-         # puts 'call last'
+      def last options={}
+         # puts '#####call last'
          if options
               result = where(options)
             end
          with_default_scope.last
        end
        
-           def first options=nil
-              puts 'call first'
+           def first options={}
+              # puts 'call first'
               where(options).find_first
             end
    }
@@ -208,6 +326,17 @@ puts 'definde mongo'
        end
      end
    }
+   
+   Date.class_exec{
+     def to_mongo
+      self
+       # if t=split("/").size==3
+       #    Date.parse(self).to_s
+       # end
+     end
+   }
+   
+   
    
    module Extensions
     module Date

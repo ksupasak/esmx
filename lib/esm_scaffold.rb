@@ -8,11 +8,11 @@ def esm_scaffold model, &block
   classname = eval model.camelize
   pathname = model.pluralize
 
-  before_filter :setup
+  before_action :setup
   columns = classname.column_names
-  columns.delete 'id'
-  columns.delete 'created_at'
-  columns.delete 'updated_at'
+  # columns.delete 'id'
+  # columns.delete 'created_at'
+  # columns.delete 'updated_at'
   # columns += %w{Show Edit Delete}
   config = {:columns=>columns,:fields=>{},:list=>{:columns=>{},:actions=>{}},:new=>{:columns=>{},:actions=>{}},:edit=>{:columns=>{},:actions=>{}},:show=>{:columns=>{},:actions=>{}}}
 
@@ -24,6 +24,17 @@ def esm_scaffold model, &block
     @pathname = '/'+pathname
     @config = config
   end
+  
+  # define_method :index do
+ #
+ #
+ #    respond_to do |format|
+ #      format.json { render :template =>'esm/scaffold/index'}
+ #      format.html { render :plain => 'esm/scaffold/index'}
+ #
+ #    end
+ #
+ #  end
   
   define_method :index do
    

@@ -1,10 +1,10 @@
 require "rexml/document"
 class EsmHomeController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   def workspace
       params[:update]='workspace' unless params[:update]
   end
@@ -46,12 +46,14 @@ class EsmHomeController < EsmController
   end
   
   
-  
+  def esm_params
+    params.require(:esm).permit(:title,:name,:url)
+  end
   
   def esm_new
     @esm = @current_user.esms.new
     if request.post?
-      @esm = @current_user.esms.create params[:esm]
+      @esm = @current_user.esms.create esm_params
       @esm.projects.create :name=>'www',:title=>'Www'
       if @esm!=nil
         session[:esm]= @esm.id
@@ -63,8 +65,10 @@ class EsmHomeController < EsmController
   end
   
   def esm_switch
+    
     @esm = Esm.find(params[:id])
     session[:esm]=@esm.id
+    cookies.delete :esm
     redirect_to :action=>'index'
   end
   

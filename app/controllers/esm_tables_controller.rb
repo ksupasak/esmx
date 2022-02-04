@@ -36,7 +36,7 @@ class EsmTablesController < EsmDevController
     @table = Table.find(params[:id])
     @project = @table.schema.project
     if request.post?
-        @table.update_attributes params[:table]
+        @table.update params.require(:table).permit(:name, :command, :data, :schema_id)
         render_to_panel :partial=>'/esm_services/updated.html'
     else
         render_to_panel :partial=>'edit.html'

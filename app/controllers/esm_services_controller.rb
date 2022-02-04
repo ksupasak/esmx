@@ -1,9 +1,9 @@
 class EsmServicesController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   def workspace
       params[:update]='workspace' unless params[:update]
   end
@@ -22,11 +22,16 @@ class EsmServicesController < EsmController
   end
   
   
+  def service_params
+    params.require(:service).permit(:title,:name,:extended, :acl)
+  end
+  
   def new
         @project = @context.projects.find(params[:id])
         @service = @project.services.new
         if request.post?
-                @service.update_attributes params[:service]
+          @service.assign_attributes service_params
+                @service.save
                 reload_workspace :controller=>'esm_services',:action=>'show',:id=>@service
         else
         render_to_panel :partial=>'new'
@@ -45,7 +50,7 @@ class EsmServicesController < EsmController
         @service = Service.find(params[:id])
         @project = @service.project
         if request.post?
-         @service.update_attributes params[:service]
+         @service.update service_params
          reload_workspace
         else
         render_to_panel :partial=>'edit'

@@ -26,6 +26,13 @@ field.style ='' unless field.style
 # 	field.style+=';display:none;'
 # end
 
+if @edit 
+	color = 'color:red' if label =='Untitled'
+	link_to_edit = link_to(label.html_safe,"/esm_documents/#{@document.id}/field_edit?field_id=#{field.id}&update=control", :remote=>true, :style=>color)
+	@label = link_to_edit
+	
+end 	
+
 case  field.field_type
 when 'chapter' 
 c=0
@@ -33,6 +40,7 @@ c=0
 	<div id="<%=f_id%>" class="<%=cmode%>"  >
 	<b>
 		<% if @edit %>
+		
 		<%= link_to label, {:action => "field_edit",:id=>@document,:field_id=>field.id,:update=>'control'},:remote=>true %>	: 
 		<% else %>
 		<%= label%>
@@ -119,7 +127,7 @@ else
 	# debug
 	
 	if field.column_name =='location_name'
-		puts "Class #{@record.class} Doc #{@document.name}"
+		# puts "Class #{@record.class} Doc #{@document.name}"
 	end
  	
 
@@ -129,6 +137,7 @@ else
 	if @edit 
 		color = 'color:red' if label =='Untitled'
 		@label = link_to(label.html_safe, {:action => "field_edit",:id=>@document,:field_id=>@field.id,:update=>'control'},:remote=>true,:style=>color)
+		@label = link_to_edit
 	else
 		@label = label
 	end
@@ -359,7 +368,7 @@ $('#<%=id%>').hide()
 	if fid 
 	ffid = fid.gsub('-','_')
 
-	puts "xxxxx #{fid} #{@document.inspect}"
+	# puts "xxxxx #{fid} #{@document.inspect}"
 
 	%>
 

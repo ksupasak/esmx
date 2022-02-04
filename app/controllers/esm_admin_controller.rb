@@ -1,6 +1,6 @@
 class EsmAdminController < EsmController
 
-  before_filter :login_admin_required
+  before_action :login_admin_required
   
   def login_admin_required
     

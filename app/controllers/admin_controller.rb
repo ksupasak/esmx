@@ -1,6 +1,6 @@
 class AdminController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   
   def index
     @current_project = @context.projects.find(params[:id])

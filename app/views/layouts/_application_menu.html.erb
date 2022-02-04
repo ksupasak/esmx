@@ -22,7 +22,7 @@
 		# menus = @current_project.menu_actions.root	
 		menus = []
 		if @project_instance
-			menus = @project_instance[:menus].collect{|i| MenuAction.find(i)} 
+			menus = @project_instance[:menus].collect{|i| MenuAction.find(i.id)} 
 		end
 
 		

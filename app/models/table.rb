@@ -1,6 +1,6 @@
-class Table < ActiveRecord::Base
+class Table < ApplicationRecord
   self.table_name =  :esm_tables
-  attr_accessible :esm_id,:schema_id,:name,:data, :command
+  # attr_accessor :esm_id,:schema_id,:name,:data, :command
   belongs_to :schema
   
   def data_columns

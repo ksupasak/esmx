@@ -1,7 +1,7 @@
 <strong>Table</strong>
 <hr/>
 <div style="width:100%;border:0px solid">
-<%= form_for(:table,:url=>{:action=>'edit',:update=>'update'},:remote=>true) do |f| %>
+<%= form_for(:table,:url=>"/esm_tables/#{@table.id}/edit?update=update",:remote=>true) do |f| %>
 
 <%= render :partial=> 'table', :locals=>{:f=>f} %>
 <br/>

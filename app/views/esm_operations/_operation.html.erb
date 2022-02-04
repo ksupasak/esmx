@@ -2,6 +2,7 @@
 
 <%  @operation.edit_mode %>
 
+
 <div style="left:250px;right:0px;top:300px;bottom:100px;height:70vh">
 
 		
@@ -14,18 +15,32 @@
 	  <%= f.label :template , :style=>'display:inline'%> :
 
 	<%= f.select :template_id, ScriptTemplate.all.collect{|i| [i.name,i.id]},{},:style=>'width:150px'%> 
-	<%= f.submit 'Update',:data=>{:disable_with=>'Loading'} ,:class=>bt_class,:style=>"width:100px"%>
+<% if @operation.id %>
+	<%= f.submit 'Update',:data=>{:disable_with=>'Loading'} ,:class=>bt_class,:style=>"width:100px" if @operation.id%>
+<% else %>
+	<%= f.submit 'Create',:class=>bt_class ,:style=>"width:100px" %> | <%= link_to 'Cancel', :action=>'service',:id=>@service%>
+<% end %>
 
+	
+<span id="result">.</span>
 	</div>
 	<div class="clear">
 
 	</div>
 <div id="editor" style="display:block;position:relative;border:1px solid #aaa;height:100%"><%=@operation.command%></div>
 <span style='float:left;margin-top:10px'>
-<%= f.submit 'Update',:data=>{:disable_with=>'Loading'} ,:class=>bt_class,:style=>"width:100px"%> | 
-<%= f.submit 'Test',:class=>bt_class %> | 
+
+<% if @operation.id %>	
+	
+<%= f.submit 'Update',:data=>{:disable_with=>'Loading'},:id=>'update_btn' ,:class=>bt_class,:style=>"width:100px" if @operation.id%> | 
+<%= f.submit 'Test',:class=>bt_class if @operation.id%> | 
 <%= link_to 'Cancel', {:controller=>'esm_services',:action=>'show',:id=>@service,:update=>'workspace'},:remote=>true %> | 
 <%= link_to 'Delete', {:action=>'destroy',:id=>@operation},:remote=>true,:data=>{:confirm=>'Are you sure?'} %>
+
+<% else %>
+<%= f.submit 'Create',:class=>bt_class,:id=>'update_btn' %> | <%= link_to 'Cancel', :action=>'service',:id=>@service%>
+<% end %>
+
 </span>
 </div>
 <%= f.text_area :command ,:style=>"display:none"%>
@@ -65,5 +80,38 @@ $(function() {
     unifyHeights();
 });
 </script>
+
+<script>
+
+
+const result = document.querySelector('#result')
+const keys = {}
+
+window.addEventListener('keydown', (ev) => {
+  keys[ev.key] = true
+  
+})
+
+window.addEventListener('keyup', (ev) => {
+
+
+ if (keys['Control'] && keys['s'] ) {
+	 result.innerText = "Updating.." ;
+	 
+	 $('#update_btn').click();
+	 
+	 
+  } else {
+    setTimeout(() => result.innerText="", 500)
+  }
+  
+  keys[ev.key] = false
+  
+  ev.preventDefault()
+})
+    
+    
+</script>
+
 <div id="update-panel">
 </div>

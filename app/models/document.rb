@@ -1,10 +1,10 @@
 require 'yaml'
 require 'field'
 require  "mime/types"
-class Document < ActiveRecord::Base
+class Document < ApplicationRecord
   
   
-  attr_accessible :name,:document_type,:data,:user_id,:project_id,:table_id,:sort_order,:published,:title,:acl,:tree_data
+  # attr_accessor :name,:document_type,:data,:user_id,:project_id,:table_id,:sort_order,:published,:title,:acl,:tree_data
   
   
 
@@ -36,7 +36,7 @@ class Document < ActiveRecord::Base
   def refresh_structure data
     if data
        begin
-         @model = YAML::load(data)
+         @model = YAML::load(data,permitted_classes: [FIELDCOMPRESSION, Symbol, Field])
          if @model
                     
                  
@@ -79,7 +79,7 @@ class Document < ActiveRecord::Base
       
       
     if field.column_name!=params[:column_name] and !Field.visual_types.index(params[:field_type])
-       if params[:column_name]!="" and !columns.index(params[:column_name]) and t = Field.data_types[params[:field_type]] and t!=nil
+       if params[:column_name]!="" and !columns.key?(params[:column_name]) and t = Field.data_types[params[:field_type]] and t!=nil
           self.table.add_column params[:column_name], t
         else
           return false
@@ -223,9 +223,14 @@ class Document < ActiveRecord::Base
             f = params[self.name.to_sym][k]
             if f
   	        value = Fields::RelationMany.filter_params(self,field,params[:record][k],f)
-            puts "============== #{value.inspect}"
-            params[:record][k.to_sym] = value if value.size>0
-
+            #puts "============== #{value.inspect}"
+            
+              if value.size>0
+                params[:record][k.to_sym] = value
+              else
+                params[:record][k.to_sym] = []
+              end
+              
             else
   	  # puts "$$$$$ many #{k}"
 
@@ -500,6 +505,54 @@ class Document < ActiveRecord::Base
    end
    
    
+   def attach_image_restore att_id
+     
+     model = self.project.load_model[:attachment]
+     att = model.find att_id
+     
+     if att and att.original_id
+       att.update_attributes :file_id=>att.original_id, :thumb_id=>nil, :original_id=>nil
+     end
+     
+     return att
+   end
+   
+   def attach_image_update att_id, data
+     
+     model = self.project.load_model[:attachment]
+     att = model.find att_id
+     
+     if att
+       filename = att.filename   
+       # grid = Mongo::Grid.new(MongoMapper.database)
+       
+       
+       Mongoid.override_database(self.project.esm.db_name)
+        
+       connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
+        
+       grid = Mongo::Grid::FSBucket.new(connection.database)
+     
+       id = grid.upload_from_stream(filename,data)
+       
+       # id = grid.put(data,:filename=>filename)
+       
+       original_id = att.file_id
+       
+       if att.original_id
+         original_id = att.original_id
+         grid.delete att.file_id
+       end 
+       
+       
+       att.update_attributes :file_id=>id, :thumb_id=>nil, :original_id=>original_id
+     end
+     
+     return att
+     
+      
+   end
+   
    def attach_field_file field_id, filename, ssid, io, sort_order = 0 ,ref =''
        
           
@@ -522,12 +575,67 @@ class Document < ActiveRecord::Base
             connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
              
             grid = Mongo::Grid::FSBucket.new(connection.database)
-              
-            id = grid.upload_from_stream(filename,io.read)
+             
+            puts 'Call upload'
+             
+             puts io.inspect  
+            # id = grid.upload_from_stream(filename,io.read)
              # id = io.pipe(grid.open_upload_stream(filename))
              
              
              puts id.inspect 
+             
+             
+             ext = filename.split(".")[-1]
+             # ext = 'jpg'
+             
+             id = nil
+             
+             if ext != 'jpg' and ext !='jpeg'
+               
+               
+               id = grid.upload_from_stream(filename,io.read)
+               
+             else
+              
+               content = io.read.force_encoding('utf-8') 
+              
+               #
+               # rx = rand(9999999).to_s
+               # # filename= ofile.filename
+               # fname = "tmp/cache/#{rx}.#{ext}"
+               # rname = "tmp/cache/#{rx}_new.#{ext}"
+               # f = File.open(fname,'w')
+               # puts "Image = #{content.size}"
+               # f.write content
+               # f.close
+               #
+               # size = '1920x1080'
+               # puts `convert -resize #{size} #{fname} #{rname}`
+               
+               if false and FileTest.exist? rname
+               
+               file = File.open(rname,'r')
+               content = file.read
+               file.close
+               File.delete fname
+               File.delete rname
+               
+               
+               id = grid.upload_from_stream(filename,content)
+               # id = grid.put(content,:filename=>filename)
+             
+               else
+                 
+                 id = grid.upload_from_stream(filename,content)
+                 # id = grid.put(content,:1filename=>filename)
+                 
+               
+               end
+             
+             end
+             
+             
              
              
              tmp = {:title=>'',:filename=>filename,:path=>filepath,:file_id=>id, :ref=>ref}
@@ -535,33 +643,7 @@ class Document < ActiveRecord::Base
              return att
           
      
-          # txt = File.open('run.rb')
-          
-       
-          
-          
-          # # att = model.create :title=>filename,:ssid=>ssid
-          #          
-          # # /public/esm/soluton/project/content/docs/[doc_name]/[field_name]/[attachmnet_id]
-          #  field = find_field(field_id)
-          #  p = [self.project.content_path,'docs',self.name,field.column_name]
-          #  path = 'public'
-          #  
-          #  type = filename.split('.')[-1]
-          #  # filepath = File.join(path,"#{att.id}.#{type}")
-          #  id = grid.put(io.read,:filename=>filename,:metadata=>{:doc=>self.name,:field=>field.column_name,:type=>type,:path=>p.join('/')})
-          #  
-          #  # for i in p
-          #  #   path = File.join(path,i)
-          #  #   Dir.mkdir path unless FileTest.exist? path
-          #  # end
-          #  
-          # 
-          #  
-          #  # File.open(filepath, "wb") { |file| file << io.read }
-          #  # tmp = {:title=>filename,:path=>filepath[6..-1]}
-          #  # att.update_attributes(tmp)
-          #  return att
+     
           
           
    end
@@ -595,7 +677,7 @@ class Document < ActiveRecord::Base
                    when 'plain'
                    	list = i.lov.split("\n").collect{|j|  [j.strip,j.strip]}
                    when 'pair'
-                   	list = i.lov.split("\n").collect{|j| c = j.split("|"); [c[0],c[1].strip] }
+                   	list = i.lov.split("\n").collect{|j| c = j.split("|");   c = [c[0],''] ; [c[0],c[1].strip] }
                    else
                    	list = []
                    end

@@ -7,12 +7,11 @@
 	<span style='float:left' >API key = user_id=<%=@current_user.id%>&amp;api_key=<%=@current_user.hashed_password%></span>
 	
 	<div style="float:right">
-		<%=link_to('Edit',{:action=>'edit',:id=>@service,:update=>'operation'},:remote=>true)%> |
-		<%=link_to('Back',:action=>'project',:id=>@project)%> |
-		<%=link_to('Import&Export',{:action=>'migrate',:id=>@service,:update=>'operation'},:remote=>true)%> |
+		<%=link_to('Edit',"/esm_services/#{@service.id}/edit?update=workspace",:remote=>true)%> |
+		<%#link_to('Import&Export',{:action=>'migrate',:id=>@service,:update=>'operation'},:remote=>true)%> 
 		
-		<%= link_to('New Operation',{:controller=>'esm_operations',:action=>'new',:id=>@service,:update=>'operation_panel'},:remote=>true) %> | 
-		<%=link_to('Show Index',@service.url(request.server_name),:remote=>false,:target=>'_blank')%>
+		<%= link_to('New Operation',"/esm_operations/new?id=#{@service.id}&update=operation_panel",:remote=>true) %> | 
+		<%=link_to('Show Index', @service.url(request.server_name),:remote=>false,:target=>'_blank')%>
 	</div>
 
 	<hr/>

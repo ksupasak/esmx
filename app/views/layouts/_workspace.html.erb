@@ -4,7 +4,9 @@
 						<%= link_to "#{@current_project.title} (#{@current_project.package})" , "/esm_projects/#{@current_project.id}/edit",:remote=>true ,:disable_with=>'loading..'%>
                         <ul>
                             <li data-expanded="true">
-                                <span class="k-sprite folder"></span><%= link_to 'Services' , "/esm_services?id=#{@current_project.id}",:remote=>true,:disable_with=>'loading..' %>
+                                <span class="k-sprite folder"></span><%= link_to 'Services' , "/esm_projects/#{@current_project.id}/services",:remote=>true,:disable_with=>'loading..' %>
+								
+                                <!-- <span class="k-sprite folder"></span><%= link_to 'Services' , "/esm_services?id=#{@current_project.id}",:remote=>true,:disable_with=>'loading..' %> -->
                                 <ul>
 										<% @current_project.services.sort{|a,b| a.name<=>b.name}.each do |i| 
 										    name = i.to_s
@@ -22,7 +24,7 @@
                                 </ul>
                             </li>
                             <li data-expanded="true">
-                                <span class="k-sprite folder"></span><%= link_to 'Documents' , "/esm_documents?id=#{@current_project.id}",:remote=>true,:disable_with=>'loading..' %>
+                                <span class="k-sprite folder"></span><%= link_to 'Documents' , "/esm_projects/#{@current_project.id}/documents",:remote=>true,:disable_with=>'loading..' %>
                                 <ul>
 											<% @current_project.documents.to_a.compact.sort{|a,b| a.name.to_s <=>b.name.to_s}.each do |i| %>
 											<li><span class="k-sprite rootfolder"></span><%= link_to i.name.humanize , "/esm_documents/#{i.id}",:remote=>true,:disable_with=>'loading..' if i.name %></li>
@@ -35,7 +37,7 @@
 
 
 							<li data-expanded="true">
-                               <span class="k-sprite folder"></span><%= link_to 'Models' , "/esm_tables?id=#{@current_project.id}",:remote=>true ,:disable_with=>'loading..'%>
+                               <span class="k-sprite folder"></span><%= link_to 'Models' , "/esm_projects/#{@current_project.id}/models",:remote=>true ,:disable_with=>'loading..'%>
                                <ul>
 	
 									<% @current_project.get_schema.tables.sort{|a,b| a.name<=>b.name}.each do |i|  %>
@@ -46,7 +48,7 @@
 
 
 							<li data-expanded="true">
-                               <span class="k-sprite folder"></span><%= link_to 'Menus' , "/esm_menus?id=#{@current_project.id}",:remote=>true ,:disable_with=>'loading..'%>
+                               <span class="k-sprite folder"></span><%= link_to 'Menus' , "/esm_projects/#{@current_project.id}/menus",:remote=>true ,:disable_with=>'loading..'%>
                                <ul>
 	
 								<% @current_project.menu_actions.sort{|a,b| a.name<=>b.name}.each do |i|  %>

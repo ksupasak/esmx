@@ -1,6 +1,6 @@
 class EsmDocumentsController < EsmDevController
 
-  skip_before_filter  :verify_authenticity_token
+  skip_before_action  :verify_authenticity_token
 
  def index 
    @project = Project.find(params[:id])
@@ -14,6 +14,12 @@ class EsmDocumentsController < EsmDevController
     render_to_panel :partial=>'show.html',:layout=>'/esm_documents/local.html'
  end
  
+
+ def document_params
+   params.require(:document).permit(:title,:name,:data,:table_id)
+ end
+ 
+ 
  
  def new
    @project = Project.find(params[:id])
@@ -24,7 +30,7 @@ class EsmDocumentsController < EsmDevController
      if table
        params[:document][:table_id] = table.id
      end
-     @document = @project.documents.create params[:document]
+     @document = @project.documents.create document_params
      
      
       # inherit from template
@@ -85,7 +91,8 @@ class EsmDocumentsController < EsmDevController
  def edit_layout
      @document = Document.find(params[:id])
      if request.post?
-       @document.update_attributes params[:document]
+       puts params.inspect 
+       @document.update document_params if params[:document]
        if params[:fields]
             params[:fields].each_pair do |k,v|
              field = @document.find_field k
@@ -100,7 +107,7 @@ class EsmDocumentsController < EsmDevController
  def edit_tree
      @document = Document.find(params[:id])
      if request.post? and params[:document] #and params[:document][:tree_data]!=''
-       @document.update_attributes params[:document]
+       @document.update params[:document]
        # if params[:fields]
        #             params[:fields].each_pair do |k,v|
        #              field = @document.find_field k

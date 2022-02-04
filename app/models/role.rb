@@ -1,9 +1,9 @@
-class Role < ActiveRecord::Base
+class Role < ApplicationRecord
   
   belongs_to :project 
   has_many :accounts
   
-  attr_accessible :name,:description,:default_home,:esm_id
+  # attr_accessor :name,:description,:default_home,:esm_id
   
   def to_s
         self.name.humanize

@@ -5,14 +5,17 @@ class EsmController < ApplicationController
     
   
 
-    before_filter :context_filter
+    # before_filter :context_filter
+    
+    before_action :context_filter
+    
     def context_filter
            
 
           Time.zone =  'Bangkok'
           
           select_esm = Esm.find_by_url request.host
-          
+ 
           # direct url
           if select_esm
              params[:solution_name] = select_esm.name   
@@ -28,10 +31,14 @@ class EsmController < ApplicationController
           
           if params[:solution_name]
                   @solution_mode = true 
-                  @current_solution = Esm.find_by_name params[:solution_name]  
+                  # @current_solution = Esm.find_by_name params[:solution_name]
+                  @current_solution = Esm.where(:name=>params[:solution_name]).first
+                  # puts params.inspect
+                  # puts "xxxxx#{@current_solution.inspect} #{params[:solution_name]}"
+                  
                   unless  @current_solution
                     @current_solution = Esm.find_by_name params[:solution_name].gsub('-','_') 
-                    params[:solution_name] =params[:solution_name].gsub('-','_') 
+                    params[:solution_name] = params[:solution_name].gsub('-','_') 
                   end
                   
                   if @current_solution
@@ -47,15 +54,19 @@ class EsmController < ApplicationController
                    end
           end
                    
-          
+       
              
           if session[:user]
            
             if session[:user].to_s.size<10
                 @current_user = User.find(session[:user]) 
-                
+         
                 if session[:esm]    
+                  
                 @current_solution = Esm.find session[:esm]
+                
+                puts "============= #{session[:esm]} #{@current_solution} "  
+                
                 else
                 @current_solution = Esm.find_by_name params[:solution_name] 
                 end
@@ -64,7 +75,6 @@ class EsmController < ApplicationController
                 @current_role = 'developer' if @current_solution and @current_solution.user == @current_user
                 
             elsif session[:esm]
-        
                 @current_solution = Esm.find session[:esm]
                 @current_user, @current_role , @solution_user =  @current_solution.get_user_role_by_id session[:user].to_s
                 session[:solution_user] = @solution_user
@@ -83,7 +93,6 @@ class EsmController < ApplicationController
             # end
           end
      
-  
           unauthorize= false
           
           if params[:solution_name] 
@@ -98,6 +107,7 @@ class EsmController < ApplicationController
               unauthorize =true
             end
           end
+          # puts "============= #{session[:esm]} #{@current_solution} #{params[:solution_name] } "  
           
           if @current_user
             unless @current_solution
@@ -138,7 +148,7 @@ class EsmController < ApplicationController
             # redirect_to "/user/login"
           end
           
-          
+             # puts "============= #{session[:esm]} #{@current_solution} "  
                        
     end
     

@@ -1,6 +1,6 @@
 class ManageController < EsmAdminController
  
- before_filter :model_filter
+ before_action :model_filter
  layout 'esm_application'
  
  def model_filter
@@ -54,6 +54,7 @@ class ManageController < EsmAdminController
              records = @model.all.collect{|i| i if i.updated_at and i.updated_at.strftime("%d%m%Y")==t}.compact!
              elsif !params[:start] and !params[:limit]
              records = @model.all :offset=>0, :limit=>50
+             
              else
              records = @model.all :offset=>params[:start].to_i, :limit=>params[:limit].to_i
              end

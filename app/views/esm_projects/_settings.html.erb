@@ -1,4 +1,8 @@
-<% for i in @settings %>
+<% for i in @settings 
+
+if i.name
+	
+	%>
 <div class="field">  
 <label><%=  i.name %> <%# i.project_id %></label>	
 <%= text_field_tag "settings[#{i.name}]", i.value  ,:class=> tb_class,:size=>30 %>
@@ -9,6 +13,12 @@
 <%# link_to "Restore", "/esm_projects/#{@project.id}/delete_setting?oid=#{i.id}&update=settings",:remote=>true %>
 
 <% end %>
+<% else 
 
+# i.destroy
+%>
+
+
+<% end %>
 </div>
 <% end %>

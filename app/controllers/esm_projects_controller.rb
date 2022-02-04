@@ -1,9 +1,9 @@
 class EsmProjectsController < EsmDevController
 
-  before_filter :login_required
+  before_action :login_required
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   def workspace urls = nil
     
      @url = url_for urls
@@ -44,17 +44,27 @@ class EsmProjectsController < EsmDevController
   def new
          @project = @context.projects.new
          if request.post?
-                 @project.update_attributes params[:project]
+           
+                @project.assign_attributes project_params
+              
                  if @project.save
+                        
                          redirect_to :action=>'show',:id=>@project
                  end
          end
    end
+   
+   
 
    def edit
          @project = @context.projects.find(params[:id])
          if request.post?
-                 @project.update_attributes params[:project]
+           p = project_params
+           puts 'after1'
+           # p.delete :params
+           # p[:params] = params[:project][:params].to_json
+           
+                 @project.update p
                  if @project.save
                     
                     if params[:settings]
@@ -62,7 +72,9 @@ class EsmProjectsController < EsmDevController
                     end
                    
                     if params[:setting]
-                      @project.settings.create params[:setting]
+                      puts params.require(:setting).permit(:name,:value).inspect 
+                     setting = @project.settings.create  params.require(:setting).permit(:name,:value)
+                     puts setting.inspect 
                     end
                     @project.get_refresh_instance
                          render_to_panel :partial=>'edit',:id=>@project
@@ -99,6 +111,15 @@ class EsmProjectsController < EsmDevController
      
      render_to_panel :partial=>'settings'
       
+   end
+   
+   
+   def project_params
+         puts 'after0'
+      
+         params[:project][:params] =  params[:project][:params].to_json  
+       
+     params.require(:project).permit(:title,:name,:extended,:domain, :acl, :params)
    end
   
 end

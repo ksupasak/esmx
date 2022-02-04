@@ -1,8 +1,8 @@
 require 'digest/sha1'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
 
-attr_accessible :login,:hashed_password,:email,:salt,:last_accessed,:activate,:role_id,:esm_id
+# attr_accessor :login,:hashed_password,:email,:salt,:last_accessed,:activate,:role_id,:esm_id
 
   belongs_to :role
   belongs_to :esm
@@ -29,7 +29,7 @@ attr_accessible :login,:hashed_password,:email,:salt,:last_accessed,:activate,:r
     self.email = self.login if self.email==nil  and self.login.index('@')
   end
 
-  attr_protected :id, :salt
+  # attr_protected :id, :salt
 
   attr_accessor :password, :password_confirmation
     

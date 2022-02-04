@@ -1,9 +1,9 @@
 
 
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   
   self.table_name =  :esm_projects
-  attr_accessible :name,:title,:extended,:acl,:package,:description,:user_id,:database_id,:dependencies,:params,:esm_id,:domain
+  # attr_accessor :name,:title,:extended,:acl,:package,:description,:user_id,:database_id,:dependencies,:params,:esm_id,:domain
   
   belongs_to :esm
   
@@ -241,7 +241,17 @@ class Project < ActiveRecord::Base
       if self.params and self.params!='' and self.params!='null'
         # r = YAML::load(self.params)
         # r = JSON.parse(self.params)
-        r = eval(self.params)
+        
+        
+     
+        
+        begin
+            r = JSON.parse(self.params)
+        rescue JSON::ParserError => e  
+            r = eval(self.params)
+        end 
+        
+  
         
         return r
       else
@@ -474,10 +484,12 @@ class Project < ActiveRecord::Base
         hash[i.name]=i
       end
       
+      puts settings.inspect
+      
       params.each_pair do |k,v|
           obj = hash[k]
           if obj.project_id == self.id
-            obj.update_attributes :value=>v
+            obj.update :value=>v
           else
             if v!=obj.value
               self.settings.create :name=>k,:value=>v

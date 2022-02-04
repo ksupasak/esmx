@@ -2,9 +2,9 @@ class UserController < EsmController
     
  
  
- before_filter :login_required, :only=>['welcome', 'change_password', 'hidden', 'logout' ]
+ before_action :login_required, :only=>['welcome', 'change_password', 'hidden', 'logout' ]
  
- before_filter :context
+ before_action :context
  
  def context
    if params[:id] and params[:id]!=''
@@ -71,7 +71,7 @@ class UserController < EsmController
            user = user_model.where(:login=>params[:user][:login]).first
            
            if user and User.encrypt(params[:user][:password], user.salt) == user.hashed_password
-                   flash[:error] = "You are not authorized to access!!"
+                   # flash[:error] = "You are not authorized to access!!"
                    @user = user 
            end
                       
@@ -154,6 +154,11 @@ class UserController < EsmController
   end
 
   def logout
+    
+    logout_path = nil
+    logout_path = session[:logout_path]
+    
+    
     session.clear                 
     session[:user] = nil
     session[:user_type] = nil
@@ -167,10 +172,15 @@ class UserController < EsmController
     session.delete :return_to
     
     cookies.delete :login 
-    cookies.delete :esm if true or params[:solution]
+    cookies.delete :esm if params[:solution]
     flash[:message] = 'Logged out'
+    flash[:logout_path] = logout_path
     if params[:redirect_to]
     redirect_to params[:redirect_to]
+    elsif logout_path
+
+    redirect_to logout_path
+    
     else
       
     # redirect_to "/user/login?id=#{params[:id]}"

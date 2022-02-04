@@ -1,9 +1,9 @@
 class EsmDevController < EsmController
 
-  before_filter :login_required ,:except=>[:snap,:recover,:barcode]
+  before_action :login_required ,:except=>[:snap,:recover,:barcode, :snap_update]
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   def workspace urls = nil
      @url = url_for urls
       params[:update]='workspace' unless params[:update]

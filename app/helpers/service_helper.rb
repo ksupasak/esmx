@@ -107,7 +107,7 @@ EOF
   
     def url path, options=nil
       if options
-      op = '?'+URI.escape(options.keys.map{|i| "#{i}=#{options[i]}"}.join('&'))
+      op = '?'+options.keys.map{|i| "#{i}=#{CGI.escape(options[i])}"}.join('&')
       else
       op = ''
       end 
@@ -162,11 +162,19 @@ EOF
      # return @current_object.context[:project].get_document name
    end
    
-   def render_value column_name
+   # def render_value column_name
+   #    field = @document.find_by_column_name column_name
+   #    @field = field
+   #    render(:partial=>'/esm_documents/show_value',:locals=>{:field=>field,:record=>@record,:column_name=>column_name})
+   # end
+   
+   def render_value column_name, options=nil
       field = @document.find_by_column_name column_name
       @field = field
-      render(:partial=>'/esm_documents/show_value',:locals=>{:field=>field,:record=>@record,:column_name=>column_name})
+      render(:partial=>'/esm_documents/show_value',:locals=>{:field=>field,:record=>@record,:column_name=>column_name,:opt=>options})
    end
+   
+   
    
    def get_has_one_value column_name, document=nil, record=nil
      

@@ -12,8 +12,13 @@
 		ondragover='dragOver()'
 		ondragleave='dragOut()'
 		ondrop='dragDrop()'><span class='tm_no' >#<%=index+1%></span><div id='body_<%=i.id%>' class='picbody' style="border:0px solid;margin:0px;padding:0px;">
-<a href="<%=i.path%>?<%=i.id%>" class="highslide" rel="highslide" onclick="return hs.expand(this)"><center><img src="<%=i.path%>?<%=i.id%>&thumb=1" name='img' id="<%=i.id%>" class="eachpicimg" border=0   height=90px align=absmiddle ></center>
+<a href="<%=i.path%>?<%=i.id%>" id="F<%=i.id%>" class="highslide" rel="highslide" onclick="hs.onDimmerClick = function(){return false;}; return hs.expand(this,{wrapperClassName:'colored-border'})"><center><img src="<%=i.path%>?<%=i.id%>&thumb=1" name='img' id="<%=i.id%>" class="eachpicimg" border=0   height=90px align=absmiddle ></center>
 </a>
+<div class="highslide-caption" style="padding: 0 10px 10px 0;display:none">
+	
+		<center><a class="esm-img-editor-btn btn"  href="javascript:image_editor('<%=i.id%>')" class="btn">Image Editor</a></center>
+		
+	</div>
 <div class='comment'>
 <input type='hidden' id='img_input_<%=i.id%>' name='<%= @name %>[id][]' value='<%=i.id%>'>
 <% if @show %>

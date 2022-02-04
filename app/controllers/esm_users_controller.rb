@@ -1,10 +1,10 @@
 class EsmUsersController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   
   def workspace urls = nil
     

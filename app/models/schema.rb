@@ -14,14 +14,14 @@ class SchemaProxy < Hash
         
 end
 
-class Schema < ActiveRecord::Base
+class Schema < ApplicationRecord
   self.table_name =  :esm_schemas
   belongs_to  :project
   has_many :tables
   
 
   
-  attr_accessible :name,:esm_id,:project_id,:schema_type,:source
+  # attr_accessor :name,:esm_id,:project_id,:schema_type,:source
   
   def attachment_model
     load_model nil, :attachment
@@ -145,6 +145,7 @@ class Attachment < MongoConnect
   key :file_id,ObjectId
   key :thumb_id,ObjectId
   key :sort_order,Integer
+  key :original_id,ObjectId
   
 end
        

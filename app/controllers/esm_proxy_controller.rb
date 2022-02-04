@@ -1,7 +1,7 @@
 # encoding: utf-8
 class EsmProxyController < EsmController
  
-  skip_before_filter :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
  
  include EsmHelper
  include ServiceHelper
@@ -15,7 +15,8 @@ class EsmProxyController < EsmController
 def index
     s = nil
     
-    
+    puts params.inspect 
+    puts @current_project.inspect
     
     if @current_solution 
        # MongoMapper.database= @current_solution.db_name
@@ -51,6 +52,7 @@ def index
  
     @mode = :app
     if params[:service]
+    
        s = Service.get("#{@current_project.package}.#{params[:service]}") 
     else
        s = Service.get(params[:package].split('/').join('.')) 
@@ -58,7 +60,7 @@ def index
   
     if s
        
-       begin 
+       # begin 
        
        @current_service = s
        @current_project = s.project
@@ -92,29 +94,29 @@ def index
           render :text=>'<br/><br/><center>You are not authorized to use '+cookies[:esm]+' service!!<br/><br/><a href="/user/login">Click to Login</a> | <a href="/user/logout">Reset session</a></center><br/>'
        end
        
-      rescue Exception => e  
-        
-msg = <<MSG
-#{DOMAIN}:#{request.fullpath}:#{Time.now.to_s};
-#{e.message}
-#{e.backtrace[0..10].join("\n")}
-MSG
-
-@msg = msg
-
-puts "ERROR : #{Time.now.to_s} #{e.message}" 
-puts request.fullpath 
-puts e.backtrace[0..10].join("\n")
-
-          msg_report DOMAIN+' Error : '+request.fullpath ,msg
-          # render :text=> "Error" 
-         render :file =>'public/500.html',:layout=>nil,:locals=>{:msg=>msg}
-         return
-         
-      end 
+      # rescue Exception => e
+#
+# msg = <<MSG
+# #{DOMAIN}:#{request.fullpath}:#{Time.now.to_s};
+# #{e.message}
+# #{e.backtrace[0..10].join("\n")}
+# MSG
+#
+# @msg = msg
+#
+# puts "ERROR : #{Time.now.to_s} #{e.message}"
+# puts request.fullpath
+# puts e.backtrace[0..10].join("\n")
+#
+#           msg_report DOMAIN+' Error : '+request.fullpath ,msg
+#           # render :text=> "Error"
+#          render :file =>'public/500.html',:layout=>nil,:locals=>{:msg=>msg}
+#          return
+#
+#       end
        
     else
-      render :text=>'Not found service on server'  
+      render :plain=>'Not found service on server'  
     end
        
      end

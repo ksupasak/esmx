@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<%= @script_template.inspect %>
+
+<textarea rows="10">
+	<%=@script_template.generator%>
+</textarea>
+
+<div>
+  <%= link_to "Edit this script template", "#{@script_template.id}/edit" %> |
+  <%= link_to "Back to script templates", script_templates_path %>
+
+  <%= button_to "Destroy this script template", @script_template, method: :delete %>
+</div>

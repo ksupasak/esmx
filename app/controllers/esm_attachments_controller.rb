@@ -2,7 +2,9 @@ class EsmAttachmentsController < EsmController
   
   protect_from_forgery :except => [:upload]
   
-  before_filter :context_filter, :except=>[:show]
+  before_action :context_filter, :except=>[:show]
+  
+  
   def show
     package = params[:package].split('/')
     # package = [params[:solution_name],params[:project_name]] + params[:package].split('/')
@@ -49,6 +51,8 @@ class EsmAttachmentsController < EsmController
            f.close
            size = '128x128'
            size = '256x256' if params[:thumb]=='2'
+           size = '1280x720' if params[:thumb]=='hd'
+           
            puts `convert -resize #{size} #{fname} #{rname}`
            file = File.open(rname,'r')
            
@@ -82,7 +86,7 @@ class EsmAttachmentsController < EsmController
     
    
     
-    render :text=>content,:content_type=>file.file_info.content_type
+    render :plain=>content,:content_type=>file.file_info.content_type
     
   end
   
@@ -98,7 +102,7 @@ class EsmAttachmentsController < EsmController
       atts = @document.attach_field_file field_id,params[:upload][:file].original_filename,params[:ssid],params[:upload][:file], 0 ,params[:ref]
        respond_to do |format|
           format.html {render :action=>'upload.html',:layout=>nil}
-          format.json {render :text=>{:id=>atts.id,:path=>atts.path,:status=>'ok'}.to_json}
+          format.json {render :plain=>{:id=>atts.id.to_s,:path=>atts.path,:status=>'ok'}.to_json}
        end
       
     else

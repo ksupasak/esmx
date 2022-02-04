@@ -1,5 +1,5 @@
-class Permission < ActiveRecord::Base
+class Permission < ApplicationRecord
   
-  attr_accessible :name,:menu_action_id,:role_id
+  # attr_accessor :name,:menu_action_id,:role_id
   
 end

@@ -1,6 +1,6 @@
 class EsmDocumentController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   # layout 'esm_application'
   
   def partial_create

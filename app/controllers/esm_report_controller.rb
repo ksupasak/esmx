@@ -1,6 +1,6 @@
 class EsmReportController < EsmController
  
-  before_filter :workspace
+  before_action :workspace
   def workspace
  
       params[:update]='workspace' unless params[:update]

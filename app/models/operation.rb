@@ -1,9 +1,9 @@
 
 
-class Operation < ActiveRecord::Base
+class Operation < ApplicationRecord
   
   
-  attr_accessible :name,:service_id,:template_id,:command,:description,:auto_test,:snippet,:title,:acl
+  # attr_accessor :name,:service_id,:template_id,:command,:description,:auto_test,:snippet,:title,:acl
   
   self.table_name = :esm_operations
   belongs_to :service

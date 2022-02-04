@@ -1,7 +1,7 @@
-class Esm < ActiveRecord::Base
+class Esm < ApplicationRecord
   
   
-  attr_accessible :name,:title,:url,:sort_order,:published,:default_project,:user_id
+  # attr_accessor :name,:title,:url,:sort_order,:published,:default_project,:user_id
   
   
   belongs_to :user

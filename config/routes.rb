@@ -1,9 +1,12 @@
 require 'resque/server'
 Esmx::Application.routes.draw do
   
-  
-    mount Resque::Server.new, :at => "/resque"
+
+          mount Resque::Server.new, :at => "/resque"
+
     
+    
+          get "/500", :to=>"errors#internal_error"
     
     
 
@@ -65,21 +68,89 @@ Esmx::Application.routes.draw do
 
 
 
-         match ':controller', :action=>'index' ,via: [:get, :post]
-         match ':controller/new',:action=>'new' ,via: [:get, :post]
-         post  ':controller/create',:action=>'create'
-
-         match ':controller/destroy/:id',:action=>'destroy' ,via: [:get, :post]
-         match ':controller/:id',:action=>'show' ,via: [:get, :post]
-         match ':controller/:id/:action' ,via: [:get, :post, :patch]
+         # match ':controller'=>':controller#index' ,via: [:get, :post]
+         # match ':controller/new',:action=>'new' ,via: [:get, :post]
+        #  post  ':controller/create',:action=>'create'
+        #  match ':controller/edit',:action=>'edit' ,via: [:get, :post]
+        #  match ':controller/update',:action=>'update' ,via: [:get, :post]
+        #
+        #  match ':controller/destroy/:id',:action=>'destroy' ,via: [:get, :post]
+         # match ':controller/:id',:action=>'show' ,via: [:get, :post]
+         # match ':controller/:id/:action' ,via: [:get, :post, :patch]
 
          match ':solution_name/:project_name/:service/:opt'=>'esm_proxy#index' ,via: [:get, :post,:delete, :put]
          
          match ':solution_name/:project_name/:service/*id/:opt'=>'esm_proxy#index' ,via: [:get, :post,:delete, :put]
          
+         
+         
+         resources :esm_projects
+         match 'esm_projects/:id/edit', to:'esm_projects#edit', via: [:get, :post]
+         match 'esm_projects/:id/add_setting', to:'esm_projects#add_setting', via: [:get, :post]
+         match 'esm_projects/:id/delete_setting', to:'esm_projects#delete_setting', via: [:get, :post]
+         
+         
+         match 'esm_projects/:id/services', to:'esm_services#index', via: [:get, :post]
+         match 'esm_projects/:id/documents', to:'esm_documents#index', via: [:get, :post]
+         match 'esm_projects/:id/models', to:'esm_tables#index', via: [:get, :post]
+         match 'esm_projects/:id/menus', to:'esm_menus#index', via: [:get, :post]
+         
+         
+         match 'esm_services/new', to:'esm_services#new', via: [:get, :post]
+         match 'esm_documents/new', to:'esm_documents#new', via: [:get, :post]
+         match 'esm_tables/new', to:'esm_tables#new', via: [:get, :post]
+         match 'esm_menus/new', to:'esm_menus#new', via: [:get, :post]
+         
+         
+         match 'esm_operations/new', to:'esm_operations#new', via: [:get, :post]
+         match 'esm_operations/:id/edit', to:'esm_operations#edit', via: [:get, :post]
+         
+        
+         match 'esm_documents/:id'=>'esm_documents#show',via: [:get, :post]
+         match 'esm_documents/:id/edit_layout'=>'esm_documents#edit_layout',via: [:get, :post]
+         match 'esm_documents/:id/edit_field'=>'esm_documents#edit_field',via: [:get, :post]
+         match 'esm_documents/:id/edit_tree'=>'esm_documents#edit_tree',via: [:get, :post]
+         
+         match 'esm_documents/:id/field_edit'=>'esm_documents#field_edit',via: [:get, :post]
+         
+         match 'esm_image/:id/attach_to_gallery'=>'esm_image#attach_to_gallery',via: [:get, :post]
+         match 'esm_image/:id/snap_update', to:'esm_image#snap_update', via: [:get, :post]
+         match 'esm_image/:id/snap_restore', to:'esm_image#snap_restore', via: [:get, :post]
+         
+         match 'esm_tables/:id/edit', to:'esm_tables#edit', via: [:get, :post]
+         
+         
+   
+         # match 'esm_projects/show'=>'esm_projects#show',via: [:get, :post]
+         # match 'esm_projects/:id'=>'esm_projects#show',via: [:get, :post]
+         # match 'esm_projects/:id/:action'=>'esm_projects',via: [:get, :post]
+         #
+         # match 'esm_projects/:id',to:'esm_projects#show', via: [:get, :post]
+         # match 'esm_projects/:id/edit',to:'esm_projects#edit', via: [:get, :post]
+         #
+         
+         
+         
          # match ':solution_name/:project_name/:service/*id'=>'esm_proxy#index' ,via: [:get, :post,:delete, :put]
-         
-         
+        match 'esm_services/:id'=>'esm_services#show',via: [:get, :post]
+        match 'esm_services'=>'esm_services#index',via: [:get, :post]
+        match 'esm_services/:id/:action'=>'esm_services',via: [:get, :post]
+        
+        
+        match 'esm_documents'=>'esm_documents#index',via: [:get, :post]
+        match 'esm_menus'=>'esm_menus#index',via: [:get, :post]
+        match 'esm_menus/:id/:action'=>'esm_menus',via: [:get, :post]
+        
+        
+        match 'esm_tables'=>'esm_tables#index',via: [:get, :post]
+        match 'esm_documents/:id'=>'esm_documents#show',via: [:get, :post]
+        match 'esm_tables/:id'=>'esm_tables#show',via: [:get, :post]
+        
+        match 'esm_operations/:id/new'=>'esm_operations#new',via: [:get, :post]
+        match 'esm_operations/:id/:action'=>'esm_operations',via: [:get, :post]
+        match 'script_templates'=>'script_templates#index',via: [:get, :post]
+        match 'esm_attachments/:id/:action'=>'esm_attachments',via: [:get, :post]
+          
          
          match ':solution_name/:project_name'=>'esm_proxy#home',via: [:get, :post]
 

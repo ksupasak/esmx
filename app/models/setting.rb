@@ -1,5 +1,5 @@
-class Setting < ActiveRecord::Base
-  attr_accessible :name,:value,:description,:esm_id,:project_id,:group
+class Setting < ApplicationRecord
+
   belongs_to :project
   
 end

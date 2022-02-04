@@ -1,6 +1,6 @@
 <div id="field-control" style="border:0px solid;font-size:1em;width:270px" >
 <div  style="width:100%">
-<%= form_for(:field,:url=>{:action=>"field_edit",:id=>@document,:field_id=>@field.id,:update=>'layout'},:remote=>true) do |f| %>
+<%= form_for(:field,:url=>"/esm_documents/#{@document.id}/field_edit?field_id=#{@field.id}&update=layout",:remote=>true) do |f| %>
 <%= render :partial=> 'field', :locals=>{:f=>f} %>
 
 <span style='float:left;margin-top:5px'>

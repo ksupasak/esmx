@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-class Service < ActiveRecord::Base
+class Service < ApplicationRecord
   
   self.table_name =  :esm_services
-  attr_accessible :name,:package,:description,:params,:extended,:cache,:user_id,:project_id,:title,:acl
+  # attr_accessor :name,:package,:description,:params,:extended,:cache,:user_id,:project_id,:title,:acl
   
   has_many :operations, :dependent => :delete_all
   belongs_to :project
@@ -70,6 +70,8 @@ class Service < ActiveRecord::Base
         t = package.split('.')
         name = t[-1].underscore
         project = Project.find_by_package(t[0..1].join('.'))
+        # project = Project.where(:package=>t[0..1].join('.')).first
+        
         instance = project.get_instance
         for i in instance[:services]
           if i.name == name
@@ -167,7 +169,9 @@ class EsmSuperClass
          ctype = 'text/html'
          ctype = params[:content_type] if params[:content_type]
          
-      (@context[:controller]).render(:inline=>command,:content_type=>ctype,:locals=>{:command=>command,:this=>this,:context=>@context,:params=>params})[0]
+      (@context[:controller]).render(:inline=>command,:content_type=>ctype,:locals=>{:command=>command,:this=>this,:context=>@context,:params=>params})
+      
+      
      end
       
       
@@ -230,7 +234,7 @@ class <%=class_name%> < <%="#{ s.extended && s.extended!="" ? s.extended.strip.s
       "'\#{self.class.name}::\#{name}'"
     end
 
-<% for m in s.operations(:includes=>[:script_template]) 
+<% for m in s.operations.includes(:script_template) 
     if m.template_id %>
         def <%=m.name%> *params
             @params = params[0] if params[0]
@@ -243,7 +247,13 @@ class <%=class_name%> < <%="#{ s.extended && s.extended!="" ? s.extended.strip.s
 end
 EOF
 
+
+# puts template
+
+
 program = ERB.new(template).result(binding)
+
+# puts program
 # file = File.open(cache_path,'w')
 # file.puts program
 # file.close 
@@ -278,7 +288,7 @@ end
 
 cclass = "Service::#{class_name}".constantize rescue nil
 if not cclass.nil?
-  puts "READ From Cache"
+  # puts "READ From Cache"
    eval(tmp)
 else
   puts "Override class #{class_name}"

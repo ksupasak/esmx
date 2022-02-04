@@ -1,9 +1,9 @@
 class EsmOperationsController < EsmController
 
-  before_filter :login_required
+  before_action :login_required
   layout 'esm_application'
   
-  before_filter :workspace
+  before_action :workspace
   def workspace
       params[:update]='workspace' unless params[:update]
   end
@@ -16,7 +16,10 @@ class EsmOperationsController < EsmController
       
   end
 
- 
+  def operation_params
+    params.require(:operation).permit(:title,:name,:template_id,:command, :acl)
+  end
+  
   def new  
         @service =Service.find(params[:id])
         @project = @service.project
@@ -35,7 +38,8 @@ class EsmOperationsController < EsmController
                   end 
                   params[:operation][:command] = template 
                 end
-                @operation.update_attributes params[:operation]
+                @operation.assign_attributes  operation_params
+                @operation.save
                reload_workspace :controller=>'esm_services',:action=>'show',:id=>@service
         else  
           render_to_panel :partial=>'new.html'
@@ -60,7 +64,7 @@ class EsmOperationsController < EsmController
                     template = ScriptTemplate.find(params[:operation][:template_id]).template 
                     params[:operation][:command] = template 
                   end
-                  @operation.update_attributes params[:operation]
+                  @operation.assign_attributes operation_params #params[:operation]
                   if @operation.save     
                   end
                   params[:op_id]=@operation.id
@@ -91,6 +95,10 @@ class EsmOperationsController < EsmController
           @project = @service.project
           @operation.destroy
           reload_workspace :controller=>'esm_services',:action=>'show',:id=>@service
+  end
+  
+  def operation_params
+    params.require(:operation).permit(:name,:service_id,:template_id,:command,:description,:auto_test,:snippet,:title,:acl)
   end
   
   

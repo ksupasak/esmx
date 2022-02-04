@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Script templates</h1>
+
+<div id="script_templates">
+  <% @script_templates.each do |script_template| %>
+    <%=  script_template.inspect  %>
+    <p>
+      <%= link_to "Show this script template", script_template %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New script template", new_script_template_path %>
