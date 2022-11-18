@@ -117,6 +117,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    jwt (2.3.0)
     kgio (2.11.4)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -351,6 +352,7 @@ DEPENDENCIES
   font-awesome-rails
   jquery-rails
   jquery-ui-rails
+  jwt
   matrix
   mongo
   mongoid (= 7.3.3)

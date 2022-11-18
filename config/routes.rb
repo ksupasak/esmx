@@ -113,6 +113,7 @@ Esmx::Application.routes.draw do
          
          match 'esm_documents/:id/field_edit'=>'esm_documents#field_edit',via: [:get, :post]
          
+         match 'esm_image/:id/snap' =>'esm_image#snap', via: [:post]
          match 'esm_image/:id/attach_to_gallery'=>'esm_image#attach_to_gallery',via: [:get, :post]
          match 'esm_image/:id/snap_update', to:'esm_image#snap_update', via: [:get, :post]
          match 'esm_image/:id/snap_restore', to:'esm_image#snap_restore', via: [:get, :post]
