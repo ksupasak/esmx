@@ -124,6 +124,6 @@ gem 'rerun'
 gem 'roo'
 gem 'roo-xls'
 
-gem 'saml2'
+# gem 'saml2'
 
 gem 'jwt'
