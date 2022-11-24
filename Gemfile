@@ -127,3 +127,5 @@ gem 'roo-xls'
 # gem 'saml2'
 
 gem 'jwt'
+
+gem 'rails_exception_handler', "~> 2"
