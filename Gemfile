@@ -128,4 +128,4 @@ gem 'roo-xls'
 
 gem 'jwt'
 
-gem 'rails_exception_handler', "~> 2"
+
