@@ -148,7 +148,7 @@ class EsmDocumentController < EsmController
   end
   def relation_has_many_remove
     
-      render :plain=>"a = $('\##{params[:id]}'); a.slideUp('fast',function(){a.remove()}); " 
+      render :plain=>"<script>a = $('\##{params[:id]}'); a.slideUp('fast',function(){a.remove()}); </script>" 
       # @document = Document.find(params[:id])
       # @field = @document.find_field params[:f_id]
       # @record = @document.project.load_model[@document.table.name.to_sym].find(params[:r_id])
