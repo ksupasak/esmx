@@ -34,6 +34,10 @@ Esmx::Application.routes.draw do
          match 'esm/*package/:opt' =>'esm_proxy#index' ,via: [:get, :post]
 
 
+         match 'esm_document/:action/:id'=>'esm_document' ,via: [:get, :post]
+         
+
+
          match 'user'=>'user#index' ,via: [:get, :post]
          match 'user/:action'=>'user' ,via: [:get, :post]
          match 'elfinder' => 'esm_content#elfinder' ,via: [:get, :post]
