@@ -29,7 +29,12 @@ class RelationMany
         
       if value 
           for i in value
-            a = model.find(i)
+            a = nil
+            if i["$oid"]
+              a = model.find(i["$oid"])
+            else
+              a = model.find(i)
+            end
             # a.destroy if a
             map[a.id.to_s] = a if a
             
