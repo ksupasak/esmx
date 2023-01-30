@@ -29,6 +29,13 @@ class EsmController < ApplicationController
                             
           end
           
+          if params[:project_name]=='esm_document' and params[:p_id]
+            
+            params[:project_name] = Project.find(params[:p_id]).name
+            
+          end
+          
+          
           if params[:solution_name]
                   @solution_mode = true 
                   # @current_solution = Esm.find_by_name params[:solution_name]
