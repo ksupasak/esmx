@@ -81,9 +81,9 @@ gem 'exception_handler'
 
 gem 'mongo'
 # gem 'mongo_mapper'
-gem 'mongoid', '7.3.3' #, github: 'mongoid/mongoid'
+gem 'mongoid'#, '7.3.3' #, github: 'mongoid/mongoid'
 # gem 'rack-gridfs'
-gem 'mongoid-grid_fs', "2.4.0"
+gem 'mongoid-grid_fs'#, "2.4.0"
 
 gem 'net-smtp'
 gem 'net-pop'
