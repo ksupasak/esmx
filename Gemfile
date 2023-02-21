@@ -72,10 +72,10 @@ gem 'unicorn'
 # To use debugger
 # gem 'debugger'
 
-gem 'exception_handler'
+# 'exception_handler'
 
 
-# gem 'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
+#  'activemodel-serializers-xml', github: 'rails/activemodel-serializers-xml'
 # gem 'active_model_serializers'
 
 
@@ -98,7 +98,7 @@ gem 'wkhtmltopdf-binary'
 gem 'xmpp4r'
 gem 'rexml'
 gem 'matrix'
-gem 'rails_exception_handler'
+#gem 'rails_exception_handler'
 # gem 'psych', '2.0.1'
 gem 'time_diff'
 gem 'nokogiri'
