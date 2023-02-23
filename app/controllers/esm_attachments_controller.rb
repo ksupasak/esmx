@@ -38,7 +38,7 @@ class EsmAttachmentsController < EsmController
       
       # if att.thumb_id == nil or (file = grid.get(att.thumb_id) )== nil or params[:thumb]=='2'
     
-      if  att.thumb_id == nil or (file = grid.open_download_stream(att.thumb_id) )== nil 
+      if  true or att.thumb_id == nil or (file = grid.open_download_stream(att.thumb_id) )== nil 
            ofile = grid.open_download_stream(att.file_id)
            info = ofile.file_info 
            ext = info.filename.split(".")[-1]
