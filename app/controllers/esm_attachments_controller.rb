@@ -64,7 +64,7 @@ class EsmAttachmentsController < EsmController
            size = '256x256' if params[:thumb]=='2'
            size = '1280x720' if params[:thumb]=='hd'
            
-           puts `convert -resize #{size} #{fname} #{rname}`
+           # puts `convert -resize #{size} #{fname} #{rname}`
            file = File.open(rname,'r')
            
            # id = grid.put(content,:filename=>filename)
@@ -101,7 +101,7 @@ class EsmAttachmentsController < EsmController
          end
      else
        
-       puts 'read from cache'
+       # puts 'read from cache'
 
         content = file.read     
         content_type = file.file_info.content_type
