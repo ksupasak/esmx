@@ -28,7 +28,7 @@ class EsmAttachmentsController < EsmController
       # connection = pool.check_out
       #
       
-      database =  Mongo::Datebase.new Mongoid.default_client, esm.db_name
+      database =  Mongo::Database.new Mongoid.default_client, esm.db_name
       
       grid = Mongo::Grid::FSBucket.new(database)
           
