@@ -87,7 +87,7 @@ class EsmAttachmentsController < EsmController
            
          end
      else
-      
+       
 
         content = file.read     
      end
