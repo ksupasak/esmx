@@ -32,6 +32,7 @@ class EsmAttachmentsController < EsmController
     
     file = nil
     content = nil
+    content_type = ""
     
     if params[:thumb] 
       
@@ -80,6 +81,8 @@ class EsmAttachmentsController < EsmController
           # file = grid.open_download_stream(id)
            content = file.read
            
+           content_type = ofile.file_info.content_type
+           
            file.close
            
          end
@@ -97,10 +100,12 @@ class EsmAttachmentsController < EsmController
     end
     
     
-    
+    if file
+        content_type = file.file_info.content_type
+    end
    
     
-    render :plain=>content,:content_type=>file.file_info.content_type
+    render :plain=>content,:content_type=>content_type
     
   end
   
