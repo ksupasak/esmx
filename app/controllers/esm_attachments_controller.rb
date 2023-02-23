@@ -92,6 +92,7 @@ class EsmAttachmentsController < EsmController
          end
      else
        
+       puts 'read from cache'
 
         content = file.read     
         content_type = file.file_info.content_type
