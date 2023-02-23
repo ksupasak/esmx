@@ -32,7 +32,7 @@ class EsmAttachmentsController < EsmController
     
     file = nil
     content = nil
-  
+    content_type =nil
     
     if params[:thumb] 
       
@@ -41,6 +41,7 @@ class EsmAttachmentsController < EsmController
     
       if  true or att.thumb_id == nil or (file = grid.open_download_stream(att.thumb_id) )== nil 
            ofile = grid.open_download_stream(att.file_id)
+           content_type = ofile.file_info.content_type
            info = ofile.file_info 
            ext = info.filename.split(".")[-1]
            ext = 'jpg'
@@ -68,6 +69,7 @@ class EsmAttachmentsController < EsmController
          
            file = grid.open_download_stream(id)
            content = file.read
+           content_type = file.file_info.content_type
            
          else
            
@@ -82,22 +84,22 @@ class EsmAttachmentsController < EsmController
              file.close
              File.delete fname
               File.delete rname
-          
            
-         
-           file = ofile
+           
            
          end
      else
        
 
         content = file.read     
+        content_type = file.file_info.content_type
      end
     
               
       
     else
             file = grid.open_download_stream(att.file_id)
+            content_type = file.file_info.content_type
             content = file.read
     end
     
@@ -105,7 +107,7 @@ class EsmAttachmentsController < EsmController
     
    
     
-    render :plain=>content,:content_type=>file.file_info.content_type
+    render :plain=>content,:content_type=>content_type 
     
   end
   
