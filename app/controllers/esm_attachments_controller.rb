@@ -23,11 +23,14 @@ class EsmAttachmentsController < EsmController
        
       # connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
        
-      pool = Mongoid.default_client.cluster.next_primary.pool   
+      # pool = Mongoid.default_client.cluster.next_primary.pool
+      #
+      # connection = pool.check_out
+      #
       
-      connection = pool.check_out
+      database =  Mongo::Datebase.new Mongoid.default_client, esm.db_name
       
-      grid = Mongo::Grid::FSBucket.new(connection.database)
+      grid = Mongo::Grid::FSBucket.new(database)
           
       # grid = Mongo::Grid::FSBucket.new(connection.database)
     
