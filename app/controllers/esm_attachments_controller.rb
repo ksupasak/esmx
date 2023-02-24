@@ -48,7 +48,7 @@ class EsmAttachmentsController < EsmController
       
       # if att.thumb_id == nil or (file = grid.get(att.thumb_id) )== nil or params[:thumb]=='2'
     
-      if  att.thumb_id == nil or params[:thumb]!= '1' or (file = grid.open_download_stream(att.thumb_id) )== nil 
+      if  att.thumb_id == nil or (file = grid.open_download_stream(att.thumb_id) )== nil 
            ofile = grid.open_download_stream(att.file_id)
            content_type = ofile.file_info.content_type
            info = ofile.file_info 
@@ -64,7 +64,7 @@ class EsmAttachmentsController < EsmController
            size = '256x256' if params[:thumb]=='2'
            size = '1280x720' if params[:thumb]=='hd'
            
-           # puts `convert -resize #{size} #{fname} #{rname}`
+           puts `convert -resize #{size} #{fname} #{rname}`
            file = File.open(rname,'r')
            
            # id = grid.put(content,:filename=>filename)

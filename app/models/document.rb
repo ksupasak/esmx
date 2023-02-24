@@ -529,9 +529,15 @@ class Document < ApplicationRecord
        
        Mongoid.override_database(self.project.esm.db_name)
         
-       connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
-        
-       grid = Mongo::Grid::FSBucket.new(connection.database)
+       # connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
+       #
+       # grid = Mongo::Grid::FSBucket.new(connection.database)
+     
+     
+       database =  Mongo::Database.new Mongoid.default_client, self.project.esm.db_name
+      
+       grid = Mongo::Grid::FSBucket.new(database)
+     
      
        id = grid.upload_from_stream(filename,data)
        
@@ -572,9 +578,15 @@ class Document < ApplicationRecord
              
             Mongoid.override_database(self.project.esm.db_name)
              
-            connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
-             
-            grid = Mongo::Grid::FSBucket.new(connection.database)
+            # connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
+     #
+     #        grid = Mongo::Grid::FSBucket.new(connection.database)
+            
+            
+            database =  Mongo::Database.new Mongoid.default_client, self.project.esm.db_name
+      
+            grid = Mongo::Grid::FSBucket.new(database)
+     
              
             puts 'Call upload'
              
