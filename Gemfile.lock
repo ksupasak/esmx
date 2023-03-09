@@ -92,10 +92,6 @@ GEM
     et-orbi (1.2.7)
       tzinfo
     eventmachine (1.2.7)
-    exception_handler (0.8.0.2)
-      bundler
-      rails (>= 4.2.0)
-      responders
     execjs (2.8.1)
     ffi (1.15.5)
     font-awesome-rails (4.7.0.8)
@@ -177,7 +173,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.6.2)
-    rack (2.2.6.2)
+    rack (2.2.6.3)
     rack-protection (3.0.5)
       rack
     rack-test (2.0.2)
@@ -202,7 +198,6 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.5.0)
       loofah (~> 2.19, >= 2.19.1)
-    rails_exception_handler (2.4.6)
     railties (6.1.4)
       actionpack (= 6.1.4)
       activesupport (= 6.1.4)
@@ -238,9 +233,6 @@ GEM
       redis (>= 2.2)
     rerun (0.14.0)
       listen (~> 3.0)
-    responders (3.1.0)
-      actionpack (>= 5.2)
-      railties (>= 5.2)
     resque (2.4.0)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
@@ -337,7 +329,6 @@ DEPENDENCIES
   creek
   el_finder
   eventmachine
-  exception_handler
   execjs
   font-awesome-rails
   jquery-rails
@@ -357,7 +348,6 @@ DEPENDENCIES
   prawn
   puma
   rails (= 6.1.4)
-  rails_exception_handler
   redis
   redis-rails
   rerun
