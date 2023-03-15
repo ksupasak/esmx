@@ -450,7 +450,7 @@ class Document < ApplicationRecord
 
   
   def self.visual_types
-    %w{section chapter clear html tab select_date}
+    %w{section chapter clear html tab }
   end
   
   # Analysis
