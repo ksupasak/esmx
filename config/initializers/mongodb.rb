@@ -361,6 +361,8 @@ Mongoid::Contextual::Mongo.class_exec{
       def as_json(options={})
         attrs = super(options)
         attrs["_id"] = self.id.to_s
+        attrs["id"] = self.id.to_s
+        
         attrs
       end
     end
