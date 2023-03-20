@@ -14,14 +14,20 @@
 Mongoid.raise_not_found_error = false
 Mongoid::Config.belongs_to_required_by_default = false
 
-module Moped
+# module Moped
   module BSON
     class ObjectId
+      
+      
       alias :to_json :to_s
       alias :as_json :to_s
+      
+   
+      
+      
     end
   end
-end
+# end
 
 
 Mongoid::Criteria::Queryable::Extensions::String.class_exec{
@@ -359,6 +365,8 @@ Mongoid::Contextual::Mongo.class_exec{
       end
     end
    end
+   
+   
    
    module Extensions
     module Date
