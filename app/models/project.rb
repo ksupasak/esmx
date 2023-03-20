@@ -200,7 +200,7 @@ class Project < ApplicationRecord
   def get_home_url request,action='index'
     subdomain = request.host.split('.')
     # puts "subdomain #{subdomain} #{DOMAIN.split(".")[0]}"
-    if subdomain[0]!=DOMAIN.split(".")[0] and subdomain[0]!='localhost' and subdomain[0]!='192' and subdomain[0].to_i==0
+    if subdomain.size>2 and  subdomain[0]!=DOMAIN.split(".")[0] and subdomain[0]!='localhost' and subdomain[0]!='192' and subdomain[0].to_i==0
       subdomain= subdomain[0]
       @solution_mode = true 
     end
