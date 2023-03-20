@@ -21,8 +21,8 @@ class EsmController < ApplicationController
              params[:solution_name] = select_esm.name   
           elsif cookies[:esm]
              params[:solution_name] = cookies[:esm]  
-          else
-             subdomain = request.host.split('.')
+          elsif subdomain = request.host.split('.') and subdomain.size>2
+            
              if !params[:solution_name] and subdomain[0]!=DOMAIN.split(".")[0] and subdomain[0]!='localhost' and subdomain[0]!='192' and subdomain[0].to_i==0
                      params[:solution_name] = subdomain[0]
              end  
@@ -35,7 +35,7 @@ class EsmController < ApplicationController
             
           end
           
-          
+          puts "** #{params[:solution_name].inspect}"
           if params[:solution_name]
                   @solution_mode = true 
                   # @current_solution = Esm.find_by_name params[:solution_name]
