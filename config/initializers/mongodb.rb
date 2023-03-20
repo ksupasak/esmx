@@ -337,6 +337,28 @@ Mongoid::Contextual::Mongo.class_exec{
    }
    
    
+   # Mongoid::Document.class_exec{
+   #
+   #
+   #   def as_json(options={})
+   #       attrs = super(options)
+   #       attrs["id"] = attrs["_id"].to_s
+   #       attrs
+   #  end
+   #
+   #
+   # }
+   Mongoid::Document.public_instance_method(:as_json).source_location
+   
+   module Mongoid
+    module Document
+      def as_json(options={})
+        attrs = super(options)
+        attrs["_id"] = self.id.to_s
+        attrs
+      end
+    end
+   end
    
    module Extensions
     module Date
