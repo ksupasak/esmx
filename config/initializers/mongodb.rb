@@ -24,7 +24,6 @@ Mongoid::Config.belongs_to_required_by_default = false
   #
   #
   #
-  #
   #   end
   # end
 # end
@@ -354,20 +353,20 @@ Mongoid::Contextual::Mongo.class_exec{
    #
    #
    # }
-   Mongoid::Document.public_instance_method(:as_json).source_location
-   
-   module Mongoid
-    module Document
-      def as_json(options={})
-        attrs = super(options)
-        attrs["_id"] = self.id.to_s
-        attrs["id"] = self.id.to_s
-        
-        attrs
-      end
-    end
-   end
-   
+   # Mongoid::Document.public_instance_method(:as_json).source_location
+   #
+   # module Mongoid
+   #  module Document
+   #    def as_json(options={})
+   #      attrs = super(options)
+   #      attrs["_id"] = self.id.to_s
+   #      attrs["id"] = self.id.to_s
+   #
+   #      attrs
+   #    end
+   #  end
+   # end
+   #
    
    
    module Extensions
