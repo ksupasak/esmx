@@ -15,17 +15,21 @@ Mongoid.raise_not_found_error = false
 Mongoid::Config.belongs_to_required_by_default = false
 
 # module Moped
-  # module BSON
-  #   class ObjectId
-  #
-  #
-  #     alias :to_json :to_s
-  #     alias :as_json :to_s
-  #
-  #
-  #
-  #   end
-  # end
+#   module BSON
+#     class ObjectId
+#
+#
+#       def to_s
+#         return
+#       end
+#
+#       alias :to_json :to_s
+#       alias :as_json :to_s
+#
+#
+#
+#     end
+#   end
 # end
 
 
@@ -107,11 +111,6 @@ Mongoid::Contextual::Mongo.class_exec{
  
  
  
- 
- 
- # call all {#<Origin::Key:0x007fc52ba28f58 @name=:date, @strategy=:__override__, @operator="$gte", @expanded=nil, @block=nil>=>Wed, 27 Jun 2018 00:00:00 +07 +07:00, #<Origin::Key:0x007fc52ba28b70 @name=:date, @strategy=:__override__, @operator="$lt", @expanded=nil, @block=nil>=>Wed, 27 Jun 2018 23:59:59 +07 +07:00}
- # MONGODB | localhost:27017 | esm-cusys.find | STARTED | {"find"=>"colorectal.appointment", "filter"=>{"date"=>{"$gte"=>Wed, 27 Jun 2018 00:00:00 +07 +07:00, "$lt"=>Wed, 27 Jun 2018 00:00:00 +07 +07:00}}}
- #  db.colorectal.appointment.find({date:{"$gte":ISODate("2018-06-27T00:00:00Z"), "$lte":ISODate("2018-06-27T23:54:00Z")}})
  Mongoid::Criteria.class_exec{
    
    def where(expression)
@@ -353,20 +352,20 @@ Mongoid::Contextual::Mongo.class_exec{
    #
    #
    # }
-   # Mongoid::Document.public_instance_method(:as_json).source_location
-   #
-   # module Mongoid
-   #  module Document
-   #    def as_json(options={})
-   #      attrs = super(options)
-   #      attrs["_id"] = self.id.to_s
-   #      attrs["id"] = self.id.to_s
-   #
-   #      attrs
-   #    end
-   #  end
-   # end
-   #
+   Mongoid::Document.public_instance_method(:as_json).source_location
+
+   module Mongoid
+    module Document
+      def as_json(options={})
+        attrs = super(options)
+        attrs["_id"] = self.id.to_s
+        attrs["id"] = self.id.to_s
+
+        attrs
+      end
+    end
+   end
+
    
    
    module Extensions
