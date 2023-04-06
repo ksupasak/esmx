@@ -373,8 +373,8 @@ function onSuccess(e) {
 
 <a href="#"  style="float:right" class="btn" data-dismiss="modal">Close</a><span style="float:right">&nbsp;&nbsp;</span>
 <a href="#"  style="float:right" class="btn  btn-info" data-dismiss="modal"  onclick="doSelect()">Submit</a><span style="float:right">&nbsp;&nbsp;</span>
-<a href="#" id="select-btn" style="float:right" class="btn" data-dismiss=""  onclick="doAdd()">Add Image</a> 
-<a href="#" id="remove-btn" style="float:right" class="btn" data-dismiss=""  onclick="doRemove()">Remove Image</a> 
+<a href="#" id="select-btn" style="float:right" class="btn" data-dismiss=""  onclick="doAdd(event)">Add Image</a> 
+<a href="#" id="remove-btn" style="float:right" class="btn" data-dismiss=""  onclick="doRemove(event)">Remove Image</a> 
 <a href="#" id="reset-btn" style="float:right" class="btn" data-dismiss=""  onclick="doReset()">Reset</a> 
 
 
@@ -587,7 +587,7 @@ function doSelectObj2(idx){
 }
 
 
-function doAdd(){
+function doAdd(e){
   if(last_select!=null&&opt==0){
       active_list.push(last_idx)
 	  buildActiveList();
@@ -596,9 +596,12 @@ function doAdd(){
  	  $('#select-btn').removeClass('btn-info')
       last_select=null
   	  last_idx=null
-}        
+	  
+}       
+e.preventDefault();
+ 
 }
-function doRemove(){
+function doRemove(e){
   if(last_select!=null&&opt==1){
       current_list.unshift(last_idx)
 	  buildCurrentList();
@@ -608,7 +611,8 @@ function doRemove(){
  	  $('#remove-btn').removeClass('btn-info')
       last_select=null
   	  last_idx=null
-}        
+}    
+e.preventDefault();    
 }
 function doReset(){
 	
