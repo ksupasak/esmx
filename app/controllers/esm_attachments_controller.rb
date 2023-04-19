@@ -69,7 +69,7 @@ class EsmAttachmentsController < EsmController
            
            # id = grid.put(content,:filename=>filename)
           
-          if att.thumb_id == nil and params[:thumb] == 1
+          if att.thumb_id == nil and params[:thumb] == '1'
             
            id = grid.upload_from_stream(filename,file)
             file.close
