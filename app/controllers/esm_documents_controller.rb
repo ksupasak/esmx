@@ -62,7 +62,13 @@ class EsmDocumentsController < EsmDevController
       if params[:document][:data]
         @document.refresh_structure params[:document][:data]
       end
-      @document.update_attributes params[:document]
+ 
+      puts @doucment.inspect
+      puts @document.class.inspect 
+      puts "----"
+      puts params[:document].permit.inspect 
+      @document.update params[:document]
+      # @doucmment.attributes = params[:document]
       reload_workspace :controller=>'esm_documents',:action=>'show',:id=>@document
     else
       render_to_panel :partial=>'edit'

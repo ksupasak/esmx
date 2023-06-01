@@ -112,8 +112,12 @@ Esmx::Application.routes.draw do
         
          match 'esm_documents/:id'=>'esm_documents#show',via: [:get, :post]
          match 'esm_documents/:id/edit_layout'=>'esm_documents#edit_layout',via: [:get, :post]
-         match 'esm_documents/:id/edit_field'=>'esm_documents#edit_field',via: [:get, :post]
+         match 'esm_documents/:id/field_edit'=>'esm_documents#field_edit',via: [:get, :post]
+         match 'esm_documents/:id/field_delete'=>'esm_documents#field_delete',via: [:get, :post]
          match 'esm_documents/:id/edit_tree'=>'esm_documents#edit_tree',via: [:get, :post]
+         
+         match 'esm_documents/:edit/:id'=>'esm_documents#edit',via: [:get, :post]
+         
          
          match 'esm_documents/:id/field_edit'=>'esm_documents#field_edit',via: [:get, :post]
          
