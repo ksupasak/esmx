@@ -10,6 +10,9 @@
 		record_id = "/#{Time.now.strftime('%Y-%m-%d')}-#{@record.id if @record}" if @record
 		record_name = ''
 		record_name = "/#{params[:record_name].gsub /\//, "-"}" if params[:record_name]
+		unless @current_solution
+			@current_solution = @document.project.esm	
+		end
 		
 		path = "esm/#{@current_solution.name}/#{@document.project.name}#{record_name}/#{@document.name}#{record_id}/#{field.column_name}"
 		@attachments = []
