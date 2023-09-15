@@ -28,10 +28,26 @@ def index
        
     end
     
+    
     Mongoid.override_database(Mongoid::Threaded.database_override)
-    connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
-           
-    grid = Mongo::Grid::FSBucket.new(connection.database)
+      
+     # connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
+      
+     # pool = Mongoid.default_client.cluster.next_primary.pool
+     #
+     # connection = pool.check_out
+     #
+     
+     database =  Mongo::Database.new Mongoid.default_client,Mongoid::Threaded.database_override
+     
+     grid = Mongo::Grid::FSBucket.new(database)
+     
+     
+    
+    # Mongoid.override_database(Mongoid::Threaded.database_override)
+   #  connection =  Mongo::Client.new Mongoid::Config.clients["default"]['hosts'], :database=>Mongoid::Threaded.database_override
+   #
+   #  grid = Mongo::Grid::FSBucket.new(connection.database)
           
     
     # grid = Mongo::GridFileSystem.new(Mongoid.database)
