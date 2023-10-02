@@ -125,7 +125,7 @@ Esmx::Application.routes.draw do
          match 'esm_image/:id/attach_to_gallery'=>'esm_image#attach_to_gallery',via: [:get, :post]
          match 'esm_image/:id/snap_update', to:'esm_image#snap_update', via: [:get, :post]
          match 'esm_image/:id/snap_restore', to:'esm_image#snap_restore', via: [:get, :post]
-         
+         match 'esm_image/barcode', to:'esm_image#barcode', via: [:get, :post]
          match 'esm_tables/:id/edit', to:'esm_tables#edit', via: [:get, :post]
          
          
