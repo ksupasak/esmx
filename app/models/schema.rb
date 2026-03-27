@@ -87,7 +87,7 @@ class Schema < ApplicationRecord
        
 class MongoConnect 
     #include MongoMapper::Document
-    
+    include Mongoid::Attributes::Dynamic
     
     def self.key name, type
       # puts "Key \#{type.inspect} \#{type.class}"
@@ -118,7 +118,7 @@ Mongoid.override_database('<%=self.project.esm.db_name%>')
 class Attachment < MongoConnect
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+    include Mongoid::Attributes::Dynamic
   # attr_accessible :title,:path,:project_id,:ssid,:file_id
   
   #set_collection_name "<%=self.project.name%>.attachment"
@@ -153,7 +153,7 @@ end
 class <%= i.name.camelize %> < MongoConnect
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+  include Mongoid::Attributes::Dynamic
   # set_collection_name "<%=self.project.name%>.<%=i.name%>"
   store_in collection: "<%=self.project.name%>.<%=i.name%>"
  

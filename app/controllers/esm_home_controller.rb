@@ -80,7 +80,7 @@ class EsmHomeController < EsmController
       # params[:esm][:name] = "#{@current_user.login}_#{params[:esm][:name]}"
       # @esm = @current_user.esms.create params[:esm]
       # session[:esm]= @esm.id
-      @esm.update_attributes params[:esm]
+      @esm.update params[:esm]
       redirect_to :action=>'index'
     end
   end
