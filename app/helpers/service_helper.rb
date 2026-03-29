@@ -295,12 +295,11 @@ EOF
    
    
    def enqueue_job *params
-     
-     require 'resque'
+
      require 'job'
-     
-     Resque.enqueue(Job::JobTest, params)
-    
+
+     Job::JobTest.perform_async(params)
+
    end
    
    def view cmd, option=nil

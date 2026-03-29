@@ -1,0 +1,24 @@
+root_menu:
+  id: 1
+  name: dashboard
+  label: Dashboard
+  published: true
+  esm_id: 1
+  project_id: 1
+
+child_menu:
+  id: 2
+  name: reports
+  label: Reports
+  parent_id: 1
+  published: true
+  esm_id: 1
+  project_id: 1
+
+unpublished_menu:
+  id: 3
+  name: hidden
+  label: Hidden Menu
+  published: false
+  esm_id: 1
+  project_id: 1

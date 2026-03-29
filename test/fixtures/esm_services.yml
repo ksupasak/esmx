@@ -1,0 +1,12 @@
+home_service:
+  id: 1
+  name: home
+  package: test_solution.www.Home
+  project_id: 1
+
+api_service:
+  id: 2
+  name: data
+  package: test_solution.api.Data
+  project_id: 2
+  acl: "user developer"

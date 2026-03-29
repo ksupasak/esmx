@@ -67,5 +67,9 @@ Esmx::Application.configure do
   
   config.eager_load = true
   config.assets.js_compressor = :uglifier
-  
+
+  # ActionCable
+  config.action_cable.url = "wss://#{ENV['DOMAIN'] || 'localhost'}/cable"
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
+
 end

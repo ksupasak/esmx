@@ -4,7 +4,8 @@ source 'https://rubygems.org'
 gem 'creek'
 # gem 'rails' , '4.2.0'
 
-gem 'rails' , '6.1.4' 
+gem 'rails' , '6.1.7.8'
+gem 'logger', '1.5.3'
 
 
 # gem 'puma'
@@ -79,11 +80,11 @@ gem 'unicorn'
 # gem 'active_model_serializers'
 
 
-gem 'mongo'
+gem 'mongo', '~> 2.20'
 # gem 'mongo_mapper'
-gem 'mongoid'#, '7.3.3' #, github: 'mongoid/mongoid'
+gem 'mongoid', '~> 8.1'
 # gem 'rack-gridfs'
-gem 'mongoid-grid_fs'#, "2.4.0"
+gem 'mongoid-grid_fs', '~> 2.5'
 
 gem 'net-smtp'
 gem 'net-pop'
@@ -93,7 +94,7 @@ gem 'net-imap'
 gem 'el_finder'
 gem 'execjs'
 # gem 'therubyracer'
-gem 'thin'
+# gem 'thin' # Disabled - using Puma; EventMachine incompatible with OpenSSL 3.x
 gem 'wkhtmltopdf-binary'
 gem 'xmpp4r'
 gem 'rexml'
@@ -104,17 +105,18 @@ gem 'time_diff'
 gem 'nokogiri'
 gem 'rest-client'
 gem 'rest-graph'
-gem 'eventmachine'
+# gem 'eventmachine' # Disabled - was only needed for thin; incompatible with OpenSSL 3.x
 
 # gem 'resque'
-gem 'resque', :require => "resque/server"
+# gem 'resque', :require => "resque/server" # Replaced by Sidekiq
+gem 'sidekiq', '~> 7.0'
 gem 'pdfkit'
 gem 'prawn'
-gem 'redis'#, '~>3.3'
+gem 'redis', '~> 4.0'
 gem 'redis-rails'
 
 # gem 'resque-delayed'
-gem 'resque-scheduler'
+# gem 'resque-scheduler' # Replaced by Sidekiq
 
 # gem 'wicked_pdf'
 

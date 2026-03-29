@@ -1,0 +1,13 @@
+app_title_setting:
+  id: 1
+  name: app_title
+  value: Test App
+  project_id: 1
+  esm_id: 1
+
+theme_setting:
+  id: 2
+  name: app_theme
+  value: default
+  project_id: 1
+  esm_id: 1

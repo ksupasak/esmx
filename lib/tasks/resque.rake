@@ -1,4 +1,2 @@
-require "resque/tasks"
-require "resque/scheduler/tasks"
-
-task "resque:setup" => :environment
+# Resque tasks replaced by Sidekiq
+# Start Sidekiq with: bundle exec sidekiq -C config/sidekiq.yml

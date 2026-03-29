@@ -40,5 +40,8 @@ Esmx::Application.configure do
   
   config.eager_load = false
 
-  
+  # ActionCable - use wss:// through nginx (matches page served over HTTPS)
+  config.action_cable.url = "wss://localhost/cable"
+  config.action_cable.allowed_request_origins = [/http:\/\/*/, /https:\/\/*/]
+
 end

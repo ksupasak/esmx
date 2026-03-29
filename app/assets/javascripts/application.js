@@ -31,6 +31,7 @@
 //= require jquery.validate.js
 //= require gebo_validation.js
 //= require tree_helper.js
+//= require cable
 //# require_tree .
 
 

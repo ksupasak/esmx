@@ -1,0 +1,5 @@
+admin_perm:
+  id: 1
+  name: admin_access
+  menu_action_id: 1
+  role_id: 1

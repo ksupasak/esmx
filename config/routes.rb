@@ -1,8 +1,9 @@
-require 'resque/server'
+require 'sidekiq/web'
 Esmx::Application.routes.draw do
-  
 
-          mount Resque::Server.new, :at => "/resque"
+
+          mount Sidekiq::Web => "/sidekiq"
+          mount ActionCable.server => "/cable"
 
     
     

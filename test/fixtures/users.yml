@@ -1,0 +1,39 @@
+admin_user:
+  id: 1
+  login: admin
+  email: admin@test.com
+  hashed_password: <%= Digest::SHA1.hexdigest('password' + 'testsalt01') %>
+  salt: testsalt01
+  activate: true
+  role_id: 1
+  esm_id: 1
+
+dev_user:
+  id: 2
+  login: developer
+  email: dev@test.com
+  hashed_password: <%= Digest::SHA1.hexdigest('devpass' + 'testsalt02') %>
+  salt: testsalt02
+  activate: true
+  role_id: 2
+  esm_id: 1
+
+regular_user:
+  id: 3
+  login: regular
+  email: regular@test.com
+  hashed_password: <%= Digest::SHA1.hexdigest('userpass' + 'testsalt03') %>
+  salt: testsalt03
+  activate: true
+  role_id: 3
+  esm_id: 1
+
+inactive_user:
+  id: 4
+  login: inactive
+  email: inactive@test.com
+  hashed_password: <%= Digest::SHA1.hexdigest('inactpass' + 'testsalt04') %>
+  salt: testsalt04
+  activate: false
+  role_id: 3
+  esm_id: 1

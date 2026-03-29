@@ -1,0 +1,13 @@
+test_solution:
+  id: 1
+  name: test_solution
+  title: Test Solution
+  user_id: 1
+  published: true
+
+unpublished_solution:
+  id: 2
+  name: hidden_solution
+  title: Hidden Solution
+  user_id: 1
+  published: false

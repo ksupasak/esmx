@@ -12,7 +12,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   mongo:
-    image: mongo:5.0
+    image: mongo:7.0
     ports:
       - "27017:27017"
     volumes:
@@ -59,22 +59,9 @@ services:
       - web
     restart: unless-stopped
 
-  resque:
+  sidekiq:
     build: .
-    command: bundle exec rake resque:work QUEUE=*
-    volumes:
-      - .:/app
-      - bundle_cache:/usr/local/bundle
-    depends_on:
-      - db
-      - mongo
-      - redis
-    env_file:
-      - .env
-
-  resque_scheduler:
-    build: .
-    command: bundle exec rake resque:scheduler
+    command: bundle exec sidekiq -C config/sidekiq.yml
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle

@@ -1,0 +1,12 @@
+development:
+  adapter: redis
+  url: <%= ENV.fetch('REDIS_URL', 'redis://:minadadmin@redis:6379/0') %>
+  channel_prefix: esmx_development
+
+test:
+  adapter: test
+
+production:
+  adapter: redis
+  url: <%= ENV.fetch('REDIS_URL', 'redis://:minadadmin@redis:6379/0') %>
+  channel_prefix: esmx_production

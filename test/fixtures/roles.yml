@@ -1,0 +1,14 @@
+admin_role:
+  id: 1
+  name: admin
+  description: Administrator
+
+developer_role:
+  id: 2
+  name: developer
+  description: Developer
+
+user_role:
+  id: 3
+  name: user
+  description: Regular user

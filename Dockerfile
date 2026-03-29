@@ -1,4 +1,4 @@
-FROM ruby:3.1.0
+FROM ruby:3.1.7
 
 RUN apt-get update -qq && apt-get install -y \
   build-essential \
@@ -9,8 +9,10 @@ RUN apt-get update -qq && apt-get install -y \
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN gem install bundler -v '~> 2.6'
+
+COPY Gemfile ./
+RUN bundle lock --update && bundle install
 
 COPY . .
 

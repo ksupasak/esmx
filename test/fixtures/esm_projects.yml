@@ -1,0 +1,13 @@
+www_project:
+  id: 1
+  name: www
+  title: WWW
+  package: test_solution.www
+  esm_id: 1
+
+api_project:
+  id: 2
+  name: api
+  title: API
+  package: test_solution.api
+  esm_id: 1
