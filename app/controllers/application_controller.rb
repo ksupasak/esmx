@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery
-  
+  protect_from_forgery with: :exception
+
   # force_ssl :except => [:index,:content]
-       ActionController::Parameters.permit_all_parameters = true
-  
+  # SECURITY: permit_all_parameters removed - use explicit permit() in each controller action
+
 end

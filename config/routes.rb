@@ -5,6 +5,13 @@ Esmx::Application.routes.draw do
           mount Sidekiq::Web => "/sidekiq"
           mount ActionCable.server => "/cable"
 
+          # Media recordings (MediaMTX → MinIO pipeline)
+          namespace :media do
+            post   'recording_complete',       to: 'recordings#recording_complete'
+            get    'recordings',               to: 'recordings#index'
+            get    'recordings/stream_url',    to: 'recordings#stream_url'
+          end
+
     
     
           get "/500", :to=>"errors#internal_error"

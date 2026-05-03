@@ -11,11 +11,14 @@ WORKDIR /app
 
 RUN gem install bundler -v '~> 2.6'
 
-COPY Gemfile ./
-RUN bundle lock --update && bundle install
+COPY Gemfile Gemfile.lock* ./
+RUN bundle install
 
 COPY . .
 
+RUN chmod +x docker-entrypoint.sh
+
 EXPOSE 3000
 
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

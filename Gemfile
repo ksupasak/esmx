@@ -9,6 +9,7 @@ gem 'logger', '1.5.3'
 
 
 # gem 'puma'
+gem 'nio4r', '~> 2.7'   # 2.5.x fails on clang 16+ (macOS 15)
 gem 'bootstrap-sass'#, '3.3.0.0'
 gem 'font-awesome-rails'#, '4.3.0.0'
 
@@ -129,5 +130,8 @@ gem 'roo-xls'
 # gem 'saml2'
 
 gem 'jwt'
+
+# S3-compatible storage (MinIO)
+gem 'aws-sdk-s3', '~> 1.0'
 
 

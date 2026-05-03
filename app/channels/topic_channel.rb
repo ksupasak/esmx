@@ -21,11 +21,13 @@ class TopicChannel < ApplicationCable::Channel
   # Client can send messages to the topic
   def speak(data)
     ActionCable.server.broadcast(@stream_name, {
-      sender: current_user&.id,
-      message: data["message"],
-      topic: params[:topic],
-      solution: params[:solution] || current_solution_id,
-      time: Time.now.to_s
+      sender_id:   current_user&.id || data["sender_id"],
+      sender_name: data["sender_name"] || current_user&.try(:name) || "User",
+      message:     data["message"],
+      type:        data["type"] || "message",
+      topic:       params[:topic],
+      solution:    params[:solution] || current_solution_id,
+      time:        Time.now.utc.iso8601
     })
   end
 

@@ -1,0 +1,1550 @@
+{
+  "scan_info": {
+    "app_path": "/Users/soup/Desktop/migration/final/esmx_ruby310_rails614",
+    "rails_version": "6.1.7.8",
+    "security_warnings": 59,
+    "start_time": "2026-04-09 01:10:38 +0700",
+    "end_time": "2026-04-09 01:10:42 +0700",
+    "duration": 3.949142,
+    "checks_performed": [
+      "BasicAuth",
+      "BasicAuthTimingAttack",
+      "CSRFTokenForgeryCVE",
+      "ContentTag",
+      "CookieSerialization",
+      "CreateWith",
+      "CrossSiteScripting",
+      "DefaultRoutes",
+      "Deserialize",
+      "DetailedExceptions",
+      "DigestDoS",
+      "DynamicFinders",
+      "EOLRails",
+      "EOLRuby",
+      "EscapeFunction",
+      "Evaluation",
+      "Execute",
+      "FileAccess",
+      "FileDisclosure",
+      "FilterSkipping",
+      "ForgerySetting",
+      "HeaderDoS",
+      "I18nXSS",
+      "JRubyXML",
+      "JSONEncoding",
+      "JSONEntityEscape",
+      "JSONParsing",
+      "LinkTo",
+      "LinkToHref",
+      "MailTo",
+      "MassAssignment",
+      "MimeTypeDoS",
+      "ModelAttrAccessible",
+      "ModelAttributes",
+      "ModelSerialize",
+      "NestedAttributes",
+      "NestedAttributesBypass",
+      "NumberToCurrency",
+      "PageCachingCVE",
+      "Pathname",
+      "PermitAttributes",
+      "QuoteTableName",
+      "Ransack",
+      "Redirect",
+      "RegexDoS",
+      "Render",
+      "RenderDoS",
+      "RenderInline",
+      "ResponseSplitting",
+      "RouteDoS",
+      "SQL",
+      "SQLCVEs",
+      "SSLVerify",
+      "SafeBufferManipulation",
+      "SanitizeConfigCve",
+      "SanitizeMethods",
+      "SelectTag",
+      "SelectVulnerability",
+      "Send",
+      "SendFile",
+      "SessionManipulation",
+      "SessionSettings",
+      "SimpleFormat",
+      "SingleQuotes",
+      "SkipBeforeFilter",
+      "SprocketsPathTraversal",
+      "StripTags",
+      "SymbolDoSCVE",
+      "TemplateInjection",
+      "TranslateBug",
+      "UnsafeReflection",
+      "UnsafeReflectionMethods",
+      "ValidationRegex",
+      "VerbConfusion",
+      "WeakRSAKey",
+      "WithoutProtection",
+      "XMLDoS",
+      "YAMLParsing"
+    ],
+    "number_of_controllers": 37,
+    "number_of_models": 26,
+    "number_of_templates": 193,
+    "ruby_version": "3.1.3",
+    "brakeman_version": "7.1.1"
+  },
+  "warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "031aa66bf3bd7676cb69212b809a40727198d61a774b05f85f60a50622924c67",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 67,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`convert -resize #{((\"128x128\" or \"256x256\") or \"1280x720\")} #{\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}.#{\"jpg\"}\"} #{\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}_thumb.#{\"jpg\"}\"}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "params[:id]",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Information Disclosure",
+      "warning_code": 61,
+      "fingerprint": "081f5d87a244b41d3cf1d5994cb792d2cec639cd70e4e306ffe1eb8abf0f32f7",
+      "check_name": "DetailedExceptions",
+      "message": "Detailed exceptions are enabled in production",
+      "file": "config/environments/production.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/information_disclosure/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        200
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "08ce028174550eae8baccfcd8e24043daef61d37d5ba7613172145b6018cfcec",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/workers/exec.rb",
+      "line": 9,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[\"cmd\"])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "CMDTask",
+        "method": "perform"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "19809cdc628ec98b2518a4adda2b4bce8ddb2ede7da179e7ae57ae32ee2036de",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 68,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.open(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}_thumb.#{\"jpg\"}\", \"r\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "1bd346728008ded32d4961f14f75593e2adad2861382db5df43a7e07ae2b9f45",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/esm_controller.rb",
+      "line": 168,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(params[:return])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmController",
+        "method": "change_screen_size"
+      },
+      "user_input": "params[:return]",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "2ea3f457fa4c529aa5c6379b8f72b993f5c0c5896f1018c2ad5588f4dd32bd33",
+      "check_name": "LinkToHref",
+      "message": "Unsafe parameter value in `link_to` href",
+      "file": "app/views/esm/scaffold/edit.html.erb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(\"Show\", \"#{\"/manage/#{params[:model]}\"}/#{eval(params[:model].singularize.camelize).find(params[:id]).id}\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "ManageController",
+          "method": "edit",
+          "line": 98,
+          "file": "app/controllers/manage_controller.rb",
+          "rendered": {
+            "name": "esm/scaffold/edit",
+            "file": "app/views/esm/scaffold/edit.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm/scaffold/edit"
+      },
+      "user_input": "params[:model]",
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "36e98f5751e519ab0ac57ecb2ddb0de8e3b58a7dee4fdea77446cc2e81ff1278",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_show_layout.html.erb",
+      "line": 42,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{f.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_show_layout"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "38ec2f983ac7be2718854ab748e8f0d089de71c8ebe9ae5c6268123f3b7143ea",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/user_controller.rb",
+      "line": 133,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(\"#{Esm.find_by_name(params[:user][:esm]).projects.find_by_name(\"www\").get_home_url(request)}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UserController",
+        "method": "login"
+      },
+      "user_input": "Esm.find_by_name(params[:user][:esm]).projects.find_by_name(\"www\").get_home_url(request)",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "3a0a4c777eac24c9c821285f0fa507b82992ceadcdcace6f04b43856a4c64b10",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/fields/relation.rb",
+      "line": 43,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Fields::Relation",
+        "method": "Fields::Relation.get_instance"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "3e926abdb120cd33492b3fc736e65e4d54f0fbd446252b35bdb86080d36621c2",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/user_controller.rb",
+      "line": 179,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(params[:redirect_to])",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UserController",
+        "method": "logout"
+      },
+      "user_input": "params[:redirect_to]",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "40e1fd663aab252074f0f5021abf6e1dedeed5c700346377e80305a19e99f337",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_show_value.html.erb",
+      "line": 4,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{@document.find_by_column_name(column_name).params}}\")",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "EsmProxyController",
+          "method": "render_value",
+          "line": 174,
+          "file": "app/helpers/service_helper.rb",
+          "rendered": {
+            "name": "esm_documents/_show_value",
+            "file": "app/views/esm_documents/_show_value.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_show_value"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "43bcc2a655a02a22abbe8b7fb2258dd5cdcf782b2b9a132ca6f0d3d357786815",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/helpers/service_helper.rb",
+      "line": 185,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{@document.find_by_column_name(column_name).params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ServiceHelper",
+        "method": "get_has_one_value"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "453b1728b0c14e8ac2de0f76e603a08f8941b634b6f01cbca5b6db0a87e31e8d",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/controllers/esm_image_controller.rb",
+      "line": 127,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`zip #{\"tmp/cache/#{Project.find(params[:p_id]).get_document(Document.find(params[:id]).name).get_model.find(params[:record_id]).id}.zip\"} #{\"#{\"tmp/cache/#{i.file_id}.#{Mongo::Grid.new(MongoMapper.database).get(i.file_id).filename.split(\".\")[-1]}\"}\"}`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmImageController",
+        "method": "download"
+      },
+      "user_input": "params[:record_id]",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "45f7983d9d00cea163f24a4c25f6ee00c921878762581fab0fc87eea4a4a6c8e",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/home_controller.rb",
+      "line": 85,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(Esm.find_by_name(params[:content]).get_home_url(request))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "HomeController",
+        "method": "content"
+      },
+      "user_input": "Esm.find_by_name(params[:content]).get_home_url(request)",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "4ca897252ca1ca1235407de4285de9dff0d224d50f2278a095caa1664af6c931",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/helpers/service_helper.rb",
+      "line": 218,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{@document.find_by_column_name(column_name).params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ServiceHelper",
+        "method": "get_has_one_value_from_collection"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Request Forgery",
+      "warning_code": 86,
+      "fingerprint": "4d109bd02e4ccb3ea4c51485c947be435ee006a61af7d2cd37d1b358c7469189",
+      "check_name": "ForgerySetting",
+      "message": "`protect_from_forgery` should be configured with `with: :exception`",
+      "file": "app/controllers/application_controller.rb",
+      "line": null,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_request_forgery/",
+      "code": null,
+      "render_path": null,
+      "location": {
+        "type": "controller",
+        "controller": "ApplicationController"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        352
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "4f73757dbdd4f90a8fd5f7798660b3e30ba9cc8dfb635e842a6230327337691b",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_render_field.html.erb",
+      "line": 117,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "esm_document/_relation_has_many_add",
+          "line": 165,
+          "file": "app/views/esm_document/_relation_has_many_add.html.erb",
+          "rendered": {
+            "name": "esm_documents/_has_many_record",
+            "file": "app/views/esm_documents/_has_many_record.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_has_many_record",
+          "line": 16,
+          "file": "app/views/esm_documents/_has_many_record.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_containers",
+            "file": "app/views/esm_documents/_render_containers.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_render_containers",
+          "line": 306,
+          "file": "app/views/esm_documents/_render_containers.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_field",
+            "file": "app/views/esm_documents/_render_field.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_render_field"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 84,
+      "fingerprint": "56543566c49924834a116fdd55cec66257ace782e48df9dbd8ee3dc7ddee4393",
+      "check_name": "RenderInline",
+      "message": "Unescaped model attribute rendered inline",
+      "file": "app/controllers/home_controller.rb",
+      "line": 104,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_scripting/",
+      "code": "render(text => Esm.find_by_name(\"cusys\").projects.find_by_name(\"colorectal\").get_service(\"home\").operations.find_by_name(\"index\").command, {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "HomeController",
+        "method": "test"
+      },
+      "user_input": "Esm.find_by_name(\"cusys\").projects.find_by_name(\"colorectal\").get_service(\"home\").operations.find_by_name(\"index\").command",
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "6048a1323ecad2bf4ec7e0b7170bb9db2209982781b094db490bf6debce507db",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/fields/relation.rb",
+      "line": 14,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Fields::Relation",
+        "method": "initialize"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "6b305db1975e1ce2398ba5d9d5fa516d008cd4cc6df2c2db8817393548120b97",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/schema.rb",
+      "line": 202,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(ERB.new(\"       \\nclass MongoConnect \\n    #include MongoMapper::Document\\n    include Mongoid::Attributes::Dynamic\\n    \\n    def self.key name, type\\n      # puts \\\"Key \\#{type.inspect} \\#{type.class}\\\"\\n      # for i in type.methods.sort\\n      #         begin\\n      #           r = type.send(i)\\n      #           puts \\\"\\#{i} \\#{r.inspect}\\\"\\n      #         rescue Exception=>e\\n      #         end\\n      #         \\n      #       end\\n      if type==Array\\n        field name, type: type, default: []\\n      else\\n        field name, type: type\\n      end\\n    end\\n    \\n    def self.timestamps!\\n      \\n    end\\nend \\n \\n# MongoMapper.database  = '<%=self.project.esm.db_name%>'\\nMongoid.override_database('<%=self.project.esm.db_name%>')\\n\\n\\nclass Attachment < MongoConnect\\n  include Mongoid::Document\\n  include Mongoid::Timestamps\\n    include Mongoid::Attributes::Dynamic\\n  # attr_accessible :title,:path,:project_id,:ssid,:file_id\\n  \\n  #set_collection_name \\\"<%=self.project.name%>.attachment\\\"\\n  \\n  store_in collection: \\\"<%=self.project.name%>.attachment\\\"\\n  \\n  # def self.read_inheritable_attribute *params\\n  #    # class_attribute *params\\n  # end\\n  # def self.write_inheritable_attribute *params\\n  #    # class_attribute *params\\n  #  end\\n  \\n  \\n  \\n  key :title,String\\n  key :selected,Integer\\n  key :params,String\\n  key :ref,String\\n  key :filename,String\\n  key :path,String\\n  key :project_id,Integer\\n  key :ssid,String\\n  key :file_id,ObjectId\\n  key :thumb_id,ObjectId\\n  key :sort_order,Integer\\n  key :original_id,ObjectId\\n  \\nend\\n       \\n<% for i in tables %>\\nclass <%= i.name.camelize %> < MongoConnect\\n  include Mongoid::Document\\n  include Mongoid::Timestamps\\n  include Mongoid::Attributes::Dynamic\\n  # set_collection_name \\\"<%=self.project.name%>.<%=i.name%>\\\"\\n  store_in collection: \\\"<%=self.project.name%>.<%=i.name%>\\\"\\n \\n  <%= i.data %>\\n  \\n  # timestamps!\\n\\nend\\n<% end %>\\n\\n<% for i in tables %>\\nclass <%= i.name.camelize %> < MongoConnect\\n\\n<%= i.command %>\\n\\nend\\n<% end %>\\n\\n\\n\\n{:attachment=>Attachment,<%= tables.collect{|i| \\\":\\#{i.name}=>\\#{i.name.camelize}\\\" }.join(',')%>}\\n\").result(binding))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Schema",
+        "method": "load_model"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "6baaf0bb5e397f861da5ce78f9e44c5819bc113426391541e36b956951561590",
+      "check_name": "Evaluation",
+      "message": "Parameter value evaluated as code",
+      "file": "app/controllers/manage_controller.rb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(params[:model].singularize.camelize)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ManageController",
+        "method": "model_filter"
+      },
+      "user_input": "params[:model].singularize.camelize",
+      "confidence": "High",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Session Setting",
+      "warning_code": 29,
+      "fingerprint": "715ad9c0d76f57a6a657192574d528b620176a80fec969e2f63c88eacab0b984",
+      "check_name": "SessionSettings",
+      "message": "Session secret should not be included in version control",
+      "file": "config/initializers/secret_token.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/session_setting/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        798
+      ]
+    },
+    {
+      "warning_type": "Session Setting",
+      "warning_code": 29,
+      "fingerprint": "715ad9c0d76f57a6a657192574d528b620176a80fec969e2f63c88eacab0b984",
+      "check_name": "SessionSettings",
+      "message": "Session secret should not be included in version control",
+      "file": "config/initializers/secret_token.rb",
+      "line": 8,
+      "link": "https://brakemanscanner.org/docs/warning_types/session_setting/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        798
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "7c60069b43a25394426a08f456a273a31d47c39abc193a091a97a639c7506595",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_render_fields.html.erb",
+      "line": 102,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_render_fields"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "816224ae96a24be8055a63b105d5c98317b4f463e6364b361338c33af3fdd375",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "app/models/workers/pdf_generator.rb",
+      "line": 30,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "`curl --insecure '#{((nil or params[\"return\"]) + \"&path=#{File.join(\"tmp\", \"cache\", \"#{(\"pdf\" or params[\"path\"])}.#{(\"id\" or params[\"id\"])}.pdf\")}\")}'`",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PdfGenerator",
+        "method": "perform"
+      },
+      "user_input": "((nil or params[\"return\"]) + \"&path=#{File.join(\"tmp\", \"cache\", \"#{(\"pdf\" or params[\"path\"])}.#{(\"id\" or params[\"id\"])}.pdf\")}\")",
+      "confidence": "Medium",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "90b2daf10a7b87db33d3fc6bb51ceb8e6d268308ed2ec40c57f3ea5332641f66",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_hidden_field.html.erb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{f.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_hidden_field"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "92632e63ecc894688054818e753c54bc7cbecd975d90342c0ab014c9f24d4d3d",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/project.rb",
+      "line": 251,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(self.params)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Project",
+        "method": "get_params"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Send",
+      "warning_code": 23,
+      "fingerprint": "95de3a397011fa3a9b59d7639a1bf2a824e717ed6df02deac0f6dcd3ac767683",
+      "check_name": "Send",
+      "message": "User controlled method execution",
+      "file": "app/controllers/esm_proxy_controller.rb",
+      "line": 244,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
+      "code": "((nil or Service.get(\"#{Project.find_by_domain(request.domain).package}.#{params[:service]}\")) or Service.get(params[:package].split(\"/\").join(\".\"))).load.send(params[:opt], params)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmProxyController",
+        "method": "ws"
+      },
+      "user_input": "params[:opt]",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 112,
+      "fingerprint": "99297a6fac9aa2e2482492e4f51b1966450bb1b0749cb5f9e31e45c6c5e7761b",
+      "check_name": "MassAssignment",
+      "message": "Mass assignment is globally enabled. Disable and specify exact keys using `params.permit` instead",
+      "file": "app/controllers/application_controller.rb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "ActionController::Parameters.permit_all_parameters = true",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ApplicationController",
+        "method": null
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "9969277b4c338e875fb81f6db33c5f76ff20ebae0702b622f7ae748976d1ceb8",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/user_controller.rb",
+      "line": 137,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(User.authenticate(\"#{params[:user][:login]}@#{params[:user][:esm]}.#{\"emr.local:3000\"}\", params[:user][:password]).my_solutions.first.default_home(request))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UserController",
+        "method": "login"
+      },
+      "user_input": "User.authenticate(\"#{params[:user][:login]}@#{params[:user][:esm]}.#{\"emr.local:3000\"}\", params[:user][:password]).my_solutions.first.default_home(request)",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "9d9a5ae87d31e3354c0755dd9d4297240c139387fdd9ee8d7e50458e01eede71",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/fields/relation_one.rb",
+      "line": 12,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Fields::RelationOne",
+        "method": "Fields::RelationOne.filter_params"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "a1067598192c0344b672f26b0543a5277c8450c6af93aa897f21aaeda5113c02",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/esm_documents/_render_field.html.erb",
+      "line": 267,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "Fields::RelationOne.new(@document, @field, @record).related_table.new.send(field.column_name)",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "esm_document/_relation_has_many_add",
+          "line": 165,
+          "file": "app/views/esm_document/_relation_has_many_add.html.erb",
+          "rendered": {
+            "name": "esm_documents/_has_many_record",
+            "file": "app/views/esm_documents/_has_many_record.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_has_many_record",
+          "line": 16,
+          "file": "app/views/esm_documents/_has_many_record.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_containers",
+            "file": "app/views/esm_documents/_render_containers.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_render_containers",
+          "line": 306,
+          "file": "app/views/esm_documents/_render_containers.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_field",
+            "file": "app/views/esm_documents/_render_field.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_render_field"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "a3ac372dbeea54feaf6c473d285edf023486bbf50e870c47ab8abf133bc9ec4f",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 77,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.delete(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}_thumb.#{\"jpg\"}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "a3ac372dbeea54feaf6c473d285edf023486bbf50e870c47ab8abf133bc9ec4f",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 97,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.delete(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}_thumb.#{\"jpg\"}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 84,
+      "fingerprint": "aa7d09f813ff1d648fabfadcea9cc13b4adec71de55f3eae02dea1cafb90ddb4",
+      "check_name": "RenderInline",
+      "message": "Unescaped model attribute rendered inline",
+      "file": "app/controllers/user_controller.rb",
+      "line": 254,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_scripting/",
+      "code": "render(inline => Service.get(\"#{((((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")) or Project.find(params[:id])).package}.Home\").load(Service.get(\"#{((((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")) or Project.find(params[:id])).package}.Home\").prepare(params, self, request)).login(params), {})",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UserController",
+        "method": "render_login"
+      },
+      "user_input": "Service.get(\"#{((((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")) or Project.find(params[:id])).package}.Home\").load(Service.get(\"#{((((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")) or Project.find(params[:id])).package}.Home\").prepare(params, self, request)).login(params)",
+      "confidence": "Medium",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "b29807673f8c3875606afd59d4ea85e00f179717d347435b26589f09e9daf43d",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/views/esm_documents/fields/_text_grid.html.erb",
+      "line": 16,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(value)",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/fields/_text_grid"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "b93dda6723a9a167219546d276411e2370d1feabaca81af82b5dfd24770a460f",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/service.rb",
+      "line": 292,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(((\"# encoding: utf-8\\n\\nclass EsmSuperClass \\n  \\n      attr_accessor :params,:context,:view\\n\\n      def initialize context=nil\\n        @context = context\\n        @params = context[:params]\\n        @current_project =context[:project]\\n        @current_solution = @current_project.esm\\n      end\\n\\n      def context\\n        @context\\n      end\\n\\n      def params\\n        @params\\n      end\\n\\n      def render_template command, this, p, layout=false        \\n        if layout\\n          command = \\\"<% content_for :context_menu do %>\\n\\#{context_menu}\\n <% end %>\\n<% content_for :content do %>\\n\\#{command}\\n <% end %> <% this = @context[:delegate] if @context[:delegate] %>\\#{self.layout}<%=include_essential%>\\\"\\n        end\\n        @command = command\\n         ctype = 'text/html'\\n         ctype = params[:content_type] if params[:content_type]\\n         \\n      (@context[:controller]).render(:inline=>command,:content_type=>ctype,:locals=>{:command=>command,:this=>this,:context=>@context,:params=>params})\\n      \\n      \\n     end\\n      \\n      \\n      \\n      def layout\\n        if @context \\n          home_service = @context[:project].get_service  'home'\\n          s = home_service.load @context \\n          l = s.layout\\n          @context[:delegate] = s\\n          return l\\n        end\\n        return '<%=yield :content%>'  \\n      end\\n      \\n      def context_menu\\n        return ''        \\n      end\\n      \\n      def method_missing m, *params, &block\\n        return \\\"No service\\\"\\n      end\\nend\\n\" + ((\"\" or File.open(Rails.root.join(\"tmp\", \"cache\", (s.package.split(\".\").reverse.join + \".rb\")), \"r\").read) or ERB.new(\"\\nclass <%=class_name%> < <%=\\\"#{if s.extended and (s.extended != \"\") then\n  s.extended.strip.split(\".\").reverse.join\nelse\n  \"EsmSuperClass\"\nend}\\\"  %>\\n\\n    def initialize context=nil\\n       super context\\n    end\\n\\n    def local_class name\\n      \\\"'\\#{self.class.name}::\\#{name}'\\\"\\n    end\\n\\n<% for m in s.operations.includes(:script_template) \\n    if m.template_id %>\\n        def <%=m.name%> *params\\n            @params = params[0] if params[0]\\n            ret = <%=templates[m.template_id].generate m.command, self, @params  %>\\n        end\\n    <% else %>\\n        <%=m.command %>\\n    <% end %>\\n<% end %>\\nend\\n\").result(binding))) or File.open(Rails.root.join(\"tmp\", \"cache\", (self.package.split(\".\").reverse.join + \".rb\"))).read))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Service",
+        "method": "load"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "b93dda6723a9a167219546d276411e2370d1feabaca81af82b5dfd24770a460f",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/service.rb",
+      "line": 295,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(((\"# encoding: utf-8\\n\\nclass EsmSuperClass \\n  \\n      attr_accessor :params,:context,:view\\n\\n      def initialize context=nil\\n        @context = context\\n        @params = context[:params]\\n        @current_project =context[:project]\\n        @current_solution = @current_project.esm\\n      end\\n\\n      def context\\n        @context\\n      end\\n\\n      def params\\n        @params\\n      end\\n\\n      def render_template command, this, p, layout=false        \\n        if layout\\n          command = \\\"<% content_for :context_menu do %>\\n\\#{context_menu}\\n <% end %>\\n<% content_for :content do %>\\n\\#{command}\\n <% end %> <% this = @context[:delegate] if @context[:delegate] %>\\#{self.layout}<%=include_essential%>\\\"\\n        end\\n        @command = command\\n         ctype = 'text/html'\\n         ctype = params[:content_type] if params[:content_type]\\n         \\n      (@context[:controller]).render(:inline=>command,:content_type=>ctype,:locals=>{:command=>command,:this=>this,:context=>@context,:params=>params})\\n      \\n      \\n     end\\n      \\n      \\n      \\n      def layout\\n        if @context \\n          home_service = @context[:project].get_service  'home'\\n          s = home_service.load @context \\n          l = s.layout\\n          @context[:delegate] = s\\n          return l\\n        end\\n        return '<%=yield :content%>'  \\n      end\\n      \\n      def context_menu\\n        return ''        \\n      end\\n      \\n      def method_missing m, *params, &block\\n        return \\\"No service\\\"\\n      end\\nend\\n\" + ((\"\" or File.open(Rails.root.join(\"tmp\", \"cache\", (s.package.split(\".\").reverse.join + \".rb\")), \"r\").read) or ERB.new(\"\\nclass <%=class_name%> < <%=\\\"#{if s.extended and (s.extended != \"\") then\n  s.extended.strip.split(\".\").reverse.join\nelse\n  \"EsmSuperClass\"\nend}\\\"  %>\\n\\n    def initialize context=nil\\n       super context\\n    end\\n\\n    def local_class name\\n      \\\"'\\#{self.class.name}::\\#{name}'\\\"\\n    end\\n\\n<% for m in s.operations.includes(:script_template) \\n    if m.template_id %>\\n        def <%=m.name%> *params\\n            @params = params[0] if params[0]\\n            ret = <%=templates[m.template_id].generate m.command, self, @params  %>\\n        end\\n    <% else %>\\n        <%=m.command %>\\n    <% end %>\\n<% end %>\\nend\\n\").result(binding))) or File.open(Rails.root.join(\"tmp\", \"cache\", (self.package.split(\".\").reverse.join + \".rb\"))).read))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Service",
+        "method": "load"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "c34c2759858562f4250214cb7d58b8981da61b04bce314cd24fd70c668b5c0d5",
+      "check_name": "Evaluation",
+      "message": "Parameter value evaluated as code",
+      "file": "app/views/esm_documents/_render_containers.html.erb",
+      "line": 406,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{Fields::RelationOne.new(@document, @field, @record).related_document.find_field(Fields::RelationOne.new(@document, @field, @record).related_document.find_by_column_name((nil or params[:s_id])).id).params}}\")",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "esm_document/_relation_has_many_add",
+          "line": 165,
+          "file": "app/views/esm_document/_relation_has_many_add.html.erb",
+          "rendered": {
+            "name": "esm_documents/_has_many_record",
+            "file": "app/views/esm_documents/_has_many_record.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_has_many_record",
+          "line": 16,
+          "file": "app/views/esm_documents/_has_many_record.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_containers",
+            "file": "app/views/esm_documents/_render_containers.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_render_containers"
+      },
+      "user_input": "params[:s_id]",
+      "confidence": "High",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "c618c78fe0d21e434764e63d860a0bbb1b3ad1a1d79c67abf5cf96b26070e85d",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 60,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.open(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}.#{\"jpg\"}\", \"w\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "c779f7ca3bb2ded04761c7a14a59c5285ddfa867aada844c3a2f50da53ee9e7a",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/layouts/_inspinia_footer.html.erb",
+      "line": 6,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "({} or (((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")).get_params)[\"footer\"]",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "EsmProxyController",
+          "method": "default_layout",
+          "line": 139,
+          "file": "app/helpers/service_helper.rb",
+          "rendered": {
+            "name": "layouts/_inspinia",
+            "file": "app/views/layouts/_inspinia.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "layouts/_inspinia",
+          "line": 52,
+          "file": "app/views/layouts/_inspinia.html.erb",
+          "rendered": {
+            "name": "layouts/_inspinia_footer",
+            "file": "app/views/layouts/_inspinia_footer.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "layouts/_inspinia_footer"
+      },
+      "user_input": "Esm.where(:name => request.host.split(\".\")[0]).first",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 70,
+      "fingerprint": "cb9e73d848b4dc8855048e147f9251a8e115dca10eb904a42740aa5de97ee10b",
+      "check_name": "MassAssignment",
+      "message": "Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys",
+      "file": "app/controllers/esm_proxy_controller.rb",
+      "line": 105,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.permit!",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmProxyController",
+        "method": "index"
+      },
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "d5cc2de438fbfcd748c90f15501ef18563f438f7fd9c28ee1dc8d93aaf92c28b",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/fields/relation_many.rb",
+      "line": 12,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{field.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Fields::RelationMany",
+        "method": "Fields::RelationMany.filter_params"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 120,
+      "fingerprint": "d84924377155b41e094acae7404ec2e521629d86f97b0ff628e3d1b263f8101c",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 6.1.7.8 ended on 2024-10-01",
+      "file": "Gemfile.lock",
+      "line": 193,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        1104
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "da83147c74727878ee829c65a4847b86b24a4f3c591131451765f82e8a6b70f6",
+      "check_name": "Evaluation",
+      "message": "Dynamic code evaluation",
+      "file": "app/models/document.rb",
+      "line": 938,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(self.tree_data.gsub(\":\", \"=>\"))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Document",
+        "method": "get_root_data_node"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Send",
+      "warning_code": 23,
+      "fingerprint": "da9516e339235f135b7b7d68178404128b1d0382442d1e8501076fa710f0dff9",
+      "check_name": "Send",
+      "message": "User controlled method execution",
+      "file": "app/controllers/esm_proxy_controller.rb",
+      "line": 105,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
+      "code": "((nil or Service.get(\"#{(((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")).package}.#{params[:service]}\")) or Service.get(params[:package].split(\"/\").join(\".\"))).load(((nil or Service.get(\"#{(((((Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(Project.find(params[:p_id]).name) or (Esm.where(:name => request.host.split(\".\")[0]).first or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\"))).projects.find_by_name(\"www\")) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(Project.find(params[:p_id]).name)) or Esm.find_by_name(request.host.split(\".\")[0].gsub(\"-\", \"_\")).projects.find_by_name(\"www\")) or User.find(session[:user]).my_solutions[0].projects.find_by_name(\"www\")).package}.#{params[:service]}\")) or Service.get(params[:package].split(\"/\").join(\".\"))).prepare(params, self, request)).send(params[:opt], params.permit!)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmProxyController",
+        "method": "index"
+      },
+      "user_input": "params[:opt]",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "da9a10a893ba599f7a0ab1a097cef3523259d05e33fcc7587c3874ca98c55ccf",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/user_controller.rb",
+      "line": 125,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(Project.find(params[:user][:project_id]).get_home_url(request))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "UserController",
+        "method": "login"
+      },
+      "user_input": "Project.find(params[:user][:project_id]).get_home_url(request)",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "db32d72631733817978eb52c63a72942ed56422df8f6df88d1837c1059cf16af",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/_show_tree_layout.html.erb",
+      "line": 132,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{f.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_show_tree_layout"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "dc77c2b1a70881c73250a961d51dfb30b05b5e1b5c42a984ad22d467935d2f08",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/esm_proxy_controller.rb",
+      "line": 143,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(\"/#{request.host.split(\".\")[0].gsub(\"-\", \"_\")}/#{Project.find(params[:p_id]).name}/Home/index\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmProxyController",
+        "method": "home"
+      },
+      "user_input": "Project.find(params[:p_id]).name",
+      "confidence": "High",
+      "cwe_id": [
+        601
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "dd6d72cfe515669e21151fd7a27ff6fb3abf893a553b811f68478abd66252bce",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/service.rb",
+      "line": 300,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"#{(s.package.split(\".\").reverse.join or self.package.split(\".\").reverse.join)}.new context\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Service",
+        "method": "load"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "e34ce8dcd2d4756ff6ddf85ec539f928724fa0cec7e4d1c71ebeb00b81e9eb62",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/schema.rb",
+      "line": 60,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{i.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Schema",
+        "method": "load_model"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 2,
+      "fingerprint": "e67ad9dc585bb1d9b34a8289c6866c34a35a12e1271ffb15edeee75f80ff3cd6",
+      "check_name": "CrossSiteScripting",
+      "message": "Unescaped model attribute",
+      "file": "app/views/esm_documents/_render_field.html.erb",
+      "line": 230,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross_site_scripting",
+      "code": "(fparams[:default] or Fields::RelationOne.new(@document, @field, @record).related_table.new.send(field.column_name)).to_s",
+      "render_path": [
+        {
+          "type": "template",
+          "name": "esm_document/_relation_has_many_add",
+          "line": 165,
+          "file": "app/views/esm_document/_relation_has_many_add.html.erb",
+          "rendered": {
+            "name": "esm_documents/_has_many_record",
+            "file": "app/views/esm_documents/_has_many_record.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_has_many_record",
+          "line": 16,
+          "file": "app/views/esm_documents/_has_many_record.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_containers",
+            "file": "app/views/esm_documents/_render_containers.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "esm_documents/_render_containers",
+          "line": 306,
+          "file": "app/views/esm_documents/_render_containers.html.erb",
+          "rendered": {
+            "name": "esm_documents/_render_field",
+            "file": "app/views/esm_documents/_render_field.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "esm_documents/_render_field"
+      },
+      "user_input": "Fields::RelationOne.new(@document, @field, @record).related_table",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "eaf4202fe7d814856d8e701b4a9bfc472d752bb7e809281259ac36669e2ff2da",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/helpers/service_helper.rb",
+      "line": 254,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{@document.find_by_column_name(column_name).params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "ServiceHelper",
+        "method": "get_has_many_value"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "f16a03027c403fd4a9bd114408c9e3fc7b928b0990a4291c9634f793fd1f0263",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/views/esm_documents/tmp_show_tree_layout.html.erb",
+      "line": 410,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{f.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "template",
+        "template": "esm_documents/tmp_show_tree_layout"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Dangerous Send",
+      "warning_code": 23,
+      "fingerprint": "f3a4a302008cc012a5ea5caa984db7fdc493a4edf0fe93bb254ad903178f835f",
+      "check_name": "Send",
+      "message": "User controlled method execution",
+      "file": "app/controllers/esm_proxy_controller.rb",
+      "line": 188,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_send/",
+      "code": "(nil or Service.get(\"#{request.host.split(\".\")[0].gsub(\"-\", \"_\")}.#{Project.find(params[:p_id]).name}.#{params[:service]}\")).load((nil or Service.get(\"#{request.host.split(\".\")[0].gsub(\"-\", \"_\")}.#{Project.find(params[:p_id]).name}.#{params[:service]}\")).prepare(params, self, request)).send(params[:opt], params)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmProxyController",
+        "method": "access"
+      },
+      "user_input": "params[:opt]",
+      "confidence": "High",
+      "cwe_id": [
+        77
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "f6654c979c8b749380ca76fc9d7f4123fef9a39fad8541406d2ba1c8f46c3870",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 76,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.delete(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}.#{\"jpg\"}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "File Access",
+      "warning_code": 16,
+      "fingerprint": "f6654c979c8b749380ca76fc9d7f4123fef9a39fad8541406d2ba1c8f46c3870",
+      "check_name": "FileAccess",
+      "message": "Model attribute used in file name",
+      "file": "app/controllers/esm_attachments_controller.rb",
+      "line": 96,
+      "link": "https://brakemanscanner.org/docs/warning_types/file_access/",
+      "code": "File.delete(\"tmp/cache/#{Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id}.#{\"jpg\"}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "EsmAttachmentsController",
+        "method": "show"
+      },
+      "user_input": "Esm.find_by_name(params[:package].split(\"/\")[0]).projects.find_by_name(params[:package].split(\"/\")[1]).attachment_model.find(params[:id]).file_id",
+      "confidence": "Medium",
+      "cwe_id": [
+        22
+      ]
+    },
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "f7427ce69ee44b6fc0bc3c49be3cf463dc41671ce459ae7f3d464060c065fcb4",
+      "check_name": "Evaluation",
+      "message": "Dynamic string evaluated as code",
+      "file": "app/models/document.rb",
+      "line": 149,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "eval(\"{#{i.params}}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Document",
+        "method": "get_mapping_master"
+      },
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        913,
+        95
+      ]
+    },
+    {
+      "warning_type": "Default Routes",
+      "warning_code": 11,
+      "fingerprint": "ff2b76e22c9fd2bc3930f9a935124b9ed9f6ea710bbb5bc7c51505d70ca0f2d5",
+      "check_name": "DefaultRoutes",
+      "message": "All public methods in controllers are available as actions in `routes.rb`",
+      "file": "config/routes.rb",
+      "line": 186,
+      "link": "https://brakemanscanner.org/docs/warning_types/default_routes/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        22
+      ]
+    }
+  ],
+  "ignored_warnings": [],
+  "errors": [],
+  "obsolete": []
+}

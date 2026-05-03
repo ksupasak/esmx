@@ -1,0 +1,70 @@
+###############################################
+# MediaMTX configuration for ESMX platform
+###############################################
+
+logLevel: info
+logDestinations: [stdout]
+
+# Authentication
+authInternalUsers:
+  - user: admin
+    pass: minadadmin
+    permissions:
+      - action: api
+      - action: publish
+      - action: read
+      - action: playback
+  - user: any
+    pass: ""
+    permissions:
+      - action: publish
+      - action: read
+      - action: playback
+
+# API
+api: yes
+apiAddress: :9997
+
+# RTSP
+rtsp: yes
+rtspAddress: :8554
+rtspTransports: [tcp]
+
+# RTMP (OBS ingest)
+rtmp: yes
+rtmpAddress: :1935
+
+# HLS (browser playback)
+hls: yes
+hlsAddress: :8888
+hlsAlwaysRemux: no
+hlsSegmentCount: 7
+hlsSegmentDuration: 1s
+
+# WebRTC (low-latency browser playback)
+webrtc: yes
+webrtcAddress: :8889
+
+# Recording defaults for ALL live paths
+pathDefaults:
+  source: publisher
+  # Auto-record all incoming streams
+  record: yes
+  recordPath: /recordings/%path/%Y%m%d_%H%M%S
+  recordFormat: fmp4
+  recordSegmentDuration: 1h
+  # Webhook to Rails when a segment is complete → Sidekiq uploads to MinIO
+  runOnRecordSegmentComplete: /on_record_complete.sh
+  runOnRecordSegmentCompleteRestart: yes
+
+paths:
+  # Live streams — any dynamic path
+  all:
+
+  # On-demand playback from MinIO via ffmpeg
+  # Request: /hls/playback/solutions/cusys/test/20260408_172835.mp4/index.m3u8
+  "~^playback/.+$":
+    record: no
+    runOnDemand: /playback.sh
+    runOnDemandStartTimeout: 30s
+    runOnDemandCloseAfter: 60s

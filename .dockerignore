@@ -1,0 +1,50 @@
+# Git
+.git
+.gitignore
+
+# Logs (265MB — biggest offender)
+log/
+*.log
+
+# Temp files
+tmp/
+/tmp
+
+# Local bundle (use volume cache instead)
+vendor/bundle
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker files (no need to copy into image)
+docker-compose.yml
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+nginx/
+mediamtx/
+
+# Test / CI
+.rspec
+spec/
+test/
+
+# VA scan reports
+va_scan/
+
+# Recordings
+recordings/
+
+# Node (if present)
+node_modules/
+
+# env files (use env_file in compose instead)
+.env
+.env.*
