@@ -54,8 +54,7 @@ pathDefaults:
   recordFormat: fmp4
   recordSegmentDuration: 1h
   # Webhook to Rails when a segment is complete → Sidekiq uploads to MinIO
-  runOnRecordSegmentComplete: /on_record_complete.sh
-  runOnRecordSegmentCompleteRestart: yes
+  # runOnRecordSegmentComplete: /on_record_complete.sh
 
 paths:
   # Live streams — any dynamic path
