@@ -85,8 +85,9 @@ class Schema < ApplicationRecord
       # puts "REQUEST #{model_name} #{tables.size}"
        template =<<EOF
        
-class MongoConnect 
+class MongoConnect
     #include MongoMapper::Document
+    include Mongoid::Document
     include Mongoid::Attributes::Dynamic
     
     def self.key name, type
