@@ -8,7 +8,6 @@ development:
         server_selection_timeout: 5
   options:
     raise_not_found_error: true
-    allow_dynamic_fields: true
 
 test:
   clients:
@@ -20,8 +19,6 @@ test:
         read:
           mode: :primary
         max_pool_size: 1
-  options:
-    allow_dynamic_fields: true
 
 production:
   clients:
@@ -33,5 +30,3 @@ production:
         read:
           mode: :primary
         max_pool_size: 5
-  options:
-    allow_dynamic_fields: true

@@ -13,7 +13,6 @@
 # MongoMapper.database = "#{name}"
 Mongoid.raise_not_found_error = false
 Mongoid::Config.belongs_to_required_by_default = false
-Mongoid.allow_dynamic_fields = true
 
 # module Moped
 #   module BSON
